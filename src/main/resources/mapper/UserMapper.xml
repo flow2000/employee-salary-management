@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.salary.dao.UserDao">
+
+    <select id="getAllUser" resultType="java.util.HashMap">
+        select user.*,role_key,role_name
+        from user,role,user_role
+        where user_role.user_id=user.user_id
+        and role.role_id=user_role.role_id
+        and user.del_flag=0
+        and user.status=0
+    </select>
+
+    <select id="getPageUser" resultType="java.util.HashMap">
+        select user.*,role_key,role_name
+        from user,role,user_role
+        where user_role.user_id=user.user_id
+        and role.role_id=user_role.role_id
+        and user.del_flag=0
+        and user.status=0
+    </select>
+
+    <select id="getOneUser" resultType="com.salary.entity.User" parameterType="String">
+        select user.*,role_key,role_name
+        from user,role,user_role
+        where user_role.user_id=user.user_id
+        and role.role_id=user_role.role_id
+        and login_name=#{login_name}
+        and user.del_flag=0
+        and user.status=0
+    </select>
+
+    <insert id="insertUser" parameterType="java.util.HashMap">
+        insert user(
+            dept_id,
+            login_name,
+            password,
+            salt,
+            user_name,
+            real_name,
+            sex,
+            email,
+            phone_number,
+            entry_time,
+            status,
+            del_flag,
+            creater,
+            create_time,
+            remark
+            ) value(
+            #{dept_id},
+            #{login_name},
+            #{password},
+            #{salt},
+            #{user_name},
+            #{real_name},
+            #{sex},
+            #{email},
+            #{phone_number},
+            #{entry_time},
+            #{status},
+            #{del_flag},
+            #{creater},
+            #{create_time},
+            #{remark}
+        )
+    </insert>
+
+    <select id="getUserPerms" resultType="java.util.HashMap" parameterType="String">
+        SELECT menu.* FROM user,menu,role_menu,user_role
+        where user.user_id=user_role.user_id
+        and user_role.role_id=role_menu.role_id
+        and role_menu.menu_id=menu.menu_id
+    </select>
+
+</mapper>
