@@ -2,7 +2,7 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
-!**/src/test/**
+**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -29,7 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/test/java/com/panghai/shinie/
-/.mvn/wrapper/
-/mvnw
-/mvnw.cmd
+/src/main/java/com/salary/model/test/
+/src/main/resources/templates/test/
