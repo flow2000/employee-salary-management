@@ -8,7 +8,7 @@
  */
 
 layui.config({
-    base:  "/libs/lay-module/",
+    base:  "/salary/libs/lay-module/",
     version: true
 }).extend({
     miniAdmin: "layuimini/miniAdmin", // layuimini后台扩展

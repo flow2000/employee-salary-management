@@ -34,8 +34,7 @@ const crx="http://localhost:8080/salary/api";
         bttTable: {},
         //缓存封装处理
         cache : {
-
-            //存进对象(会覆盖key相同的对象)
+            //存进对象(会覆盖key相同的对象)，并设置过期时间，过期时间为-1表示无期限
             set : function (key,value,expire) {
                 let obj = {
                     data: value,
@@ -45,14 +44,17 @@ const crx="http://localhost:8080/salary/api";
                 window.localStorage.setItem(key,JSON.stringify(obj));
             },
 
-            //取出对象 不存在或者过期返回null
+            //取出对象 不存在或者过期返回null，
             get : function (key) {
-                let val = localStorage.getItem(key);
+                var val = localStorage.getItem(key);
                 if (!$.common.isExist(val)) {
                     return null;
                 }
+                if(val.expire===-1){  //过期时间为-1直接返回
+                    return val.data;
+                }
                 val = JSON.parse(val);
-                if (Date.now() - val.time > val.expire) {
+                if (Date.now() - val.time > val.expire) {//判断是否过期
                     localStorage.removeItem(key);
                     return null;
                 }
@@ -95,44 +97,49 @@ const crx="http://localhost:8080/salary/api";
                 });
             },
             // 消息提示
-            msg : function(content, type) {
+            msg : function(content, type, a) {
                 if (type !== undefined) {
-                    layer.msg(content, { icon: $.modal.icon(type), time: 1000, shift: 5 });
+                    if( typeof a==='function'){
+                        layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 }, function () {a()});
+                    }else{
+                        layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 });
+                    }
                 } else {
                     layer.msg(content);
                 }
             },
             // 错误消息
-            msgError : function(content) {
-                $.modal.msg(content, modal_status.FAIL);
+            msgError : function(content,a) {
+                $.modal.msg(content, modal_status.FAIL,a);
             },
 
             // 成功消息
-            msgSuccess : function(content) {
-                $.modal.msg(content, modal_status.SUCCESS);
+            msgSuccess : function(content,a) {
+                $.modal.msg(content, modal_status.SUCCESS,a);
             },
 
             // 警告消息
-            msgWarning : function(content) {
-                $.modal.msg(content, modal_status.WARNING);
+            msgWarning : function(content,a) {
+                $.modal.msg(content, modal_status.WARNING,a);
             },
 
             // 错误提示
-            alertError : function(content) {
-                $.modal.alert(content, modal_status.FAIL);
+            alertError : function(content,a) {
+                $.modal.alert(content, modal_status.FAIL,a);
             },
             // 成功提示
-            alertSuccess : function(content) {
-                $.modal.alert(content, modal_status.SUCCESS);
+            alertSuccess : function(content,a) {
+                $.modal.alert(content, modal_status.SUCCESS,a);
             },
             // 警告提示
-            alertWarning : function(content) {
-                $.modal.alert(content, modal_status.WARNING);
+            alertWarning : function(content,a) {
+                $.modal.alert(content, modal_status.WARNING,a);
             },
 
             // 打开遮罩层
             loading : function (message) {
-                $.blockUI({ message: '<div class="loaderbox"><div class="loading-activity"></div> ' + message + '</div>' });
+                $.blockUI({ message:
+                        '<div class="loaderbox"><div class="loading-activity"></div> ' + message + '</div>' });
             },
             // 关闭遮罩层
             closeLoading : function () {

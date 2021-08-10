@@ -6,38 +6,26 @@
  * version: 1.0
  *
  */
+console.log($.common.isExist(localStorage.dasyiuy));
+user = $.cache.get("user");
+console.log(user);
+if($.common.isExist(user)){
+    $.modal.alertError("会话已过期，请重新登录");
+}
 
 
-
-$.operate.get(crx+'/user/getAllUser');
 
 //添加右上角用户名
 document.getElementById("username").innerText = "欢迎 "+$.cache.get('user').user.real_name;
 
-layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
+layui.use(['jquery', 'layer', 'miniAdmin'], function () {
 	
     var $ = layui.jquery,
         layer = layui.layer,
-        miniAdmin = layui.miniAdmin,
-        miniTongji = layui.miniTongji;
-    var iniUrl = "";
-    if(user.auth===1){
-		iniUrl = "static/layuimini/api/initAdmin.json";
-	}else if(user.auth===0){
-		iniUrl = "static/layuimini/api/initUser.json";
-	}else{
-		layer.msg('会话已过期，请重新登录', {
-    	  icon: 2,
-    	  time: 1000 
-    	}, function () {
-        	localStorage.clear();
-            window.location = 'login.jsp';
-        });
-		return;
-	}
+        miniAdmin = layui.miniAdmin;
     var options = {
-        iniUrl: iniUrl,    // 初始化接口
-        clearUrl: "static/layuimini/api/clear.json", // 缓存清理接口
+        iniUrl: "/salary/js/init.json",    // 初始化接口
+        clearUrl: "", // 缓存清理接口
         urlHashLocation: true,      // 是否打开hash定位
         bgColorDefault: false,      // 主题默认配置
         multiModule: true,          // 是否开启多模块
@@ -52,7 +40,7 @@ layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
         	  icon: 1,
         	  time: 1000 
         	}, function () {
-            window.location = 'login.jsp';
+            window.location = 'login';
         });
     });
 });

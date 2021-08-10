@@ -74,10 +74,13 @@ function callback(result) {
     if(result.code===web_status.FAIL){
         $.modal.msgError(result.msg);
     }else{
-        $.cache.set("user",result.data,60 * 1000); //将返回的数据存到localStorage并设置过期时间60分钟
-        $.modal.msgSuccess(result.msg);
+        $.cache.set("user",result.data, 60 * 60 * 1000); //将返回的数据存到localStorage并设置过期时间60分钟
+        $.modal.msgSuccess(result.msg,a);
         $.modal.closeLoading();
-        window.location = "index";
+    }
+    //消息提示回调
+    function a() {
+        window.location='index';
     }
 }
 
