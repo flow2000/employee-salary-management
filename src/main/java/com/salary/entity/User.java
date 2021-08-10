@@ -27,6 +27,7 @@ public class User {
     private String password;    //登录密码
     private String salt;        //盐加密
     private String user_name;   //昵称
+    private int role_id;        //角色权限id
     private String role_key;   //角色权限字符串
     private String role_name;   //角色名称
     private String real_name;   //真实姓名
