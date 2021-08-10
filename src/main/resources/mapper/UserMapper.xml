@@ -3,7 +3,7 @@
 <mapper namespace="com.salary.dao.UserDao">
 
     <select id="getAllUser" resultType="java.util.HashMap">
-        select user.*,role_key,role_name
+        select user.*,role.role_id,role_key,role_name
         from user,role,user_role
         where user_role.user_id=user.user_id
         and role.role_id=user_role.role_id
@@ -12,7 +12,7 @@
     </select>
 
     <select id="getPageUser" resultType="java.util.HashMap">
-        select user.*,role_key,role_name
+        select user.*,role.role_id,role_key,role_name
         from user,role,user_role
         where user_role.user_id=user.user_id
         and role.role_id=user_role.role_id
@@ -21,7 +21,7 @@
     </select>
 
     <select id="getOneUser" resultType="com.salary.entity.User" parameterType="String">
-        select user.*,role_key,role_name
+        select user.*,role.role_id,role_key,role_name
         from user,role,user_role
         where user_role.user_id=user.user_id
         and role.role_id=user_role.role_id
