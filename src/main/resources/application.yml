@@ -23,11 +23,6 @@ logging:
 
 # Spring配置
 spring:
-  # 服务模块
-  devtools:
-    restart:
-      # 热部署开关
-      enabled: true
 
   # 模板引擎
   thymeleaf:
