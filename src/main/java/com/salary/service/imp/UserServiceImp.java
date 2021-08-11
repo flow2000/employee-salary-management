@@ -3,8 +3,13 @@ package com.salary.service.imp;
 import cn.hutool.captcha.ShearCaptcha;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.salary.dao.DeptDao;
+import com.salary.dao.MenuDao;
+import com.salary.dao.RoleDao;
 import com.salary.dao.UserDao;
+import com.salary.entity.Menu;
 import com.salary.entity.User;
+import com.salary.service.MenuService;
 import com.salary.service.TokenService;
 import com.salary.service.UserService;
 import com.salary.util.AjaxResult;
@@ -22,10 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -49,6 +51,15 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
+    private DeptDao deptDao;
+
+    @Autowired
+    private MenuService menuService;
 
     /**
      * 验证码生成
@@ -99,15 +110,28 @@ public class UserServiceImp implements UserService {
         return AjaxResult.error("验证码错误");
     }
 
+    /**
+     * 项目初始化
+     * @param request 请求参数
+     *
+     * @return
+     */
     @Override
-    public AjaxResult init(Map<String, Object> map) {
-        String login_name = (String) map.get("login_name");
+    public AjaxResult init(HttpServletRequest request) {
+        String login_name = request.getHeader("login_name");
+        int role_id = Integer.parseInt(request.getParameter("role_id"));
         if(login_name==null){
             return AjaxResult.error("登录名为空");
         }
         Map<String, Object> resultMap = new HashMap<>();
-//        Map<String,Object> userMap
-        return null;
+        List<Map> roleList = roleDao.getAllRole();
+        List<Map> deptList = deptDao.getAllDept();
+        Map<String, Object> menuMap = menuService.getMenu(role_id);
+
+        resultMap.put("roles",roleList);
+        resultMap.put("depts",deptList);
+        resultMap.put("menus",menuMap);
+        return AjaxResult.returnMessage(resultMap);
     }
 
     /**
@@ -117,7 +141,13 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public AjaxResult getAllUser() {
-        return AjaxResult.returnMessage(userDao.getAllUser());
+        List<Map> list = userDao.getAllUser();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String,Object> map = list.get(i);
+            map.put("password","******");
+            list.set(i,map);
+        }
+        return AjaxResult.returnMessage(list);
     }
 
     /**
@@ -131,6 +161,11 @@ public class UserServiceImp implements UserService {
     public AjaxResult getPageUser(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);//开始分页
         List<Map> userList = userDao.getPageUser(page,limit); //拼接sql语句
+        for (int i = 0; i < userList.size(); i++) {
+            Map<String,Object> map = userList.get(i);
+            map.put("password","******");
+            userList.set(i,map);
+        }
         return AjaxResult.returnMessage(new PageInfo<>(userList)); //将分页结果放入pageUserList
     }
 
@@ -142,7 +177,9 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public AjaxResult getOneUser(String login_name) {
-        return AjaxResult.returnMessage(userDao.getOneUser(login_name));
+        User user = userDao.getOneUser(login_name);
+        user.setPassword("*******");
+        return AjaxResult.returnMessage(user);
     }
 
 

@@ -50,10 +50,10 @@ const crx="http://localhost:8080/salary/api";
                 if (!$.common.isExist(val)) {
                     return null;
                 }
+                val = JSON.parse(val);
                 if(val.expire===-1){  //过期时间为-1直接返回
                     return val.data;
                 }
-                val = JSON.parse(val);
                 if (Date.now() - val.time > val.expire) {//判断是否过期
                     localStorage.removeItem(key);
                     return null;
@@ -181,7 +181,7 @@ const crx="http://localhost:8080/salary/api";
                         }
                     },
                     error:function (result) {
-                        $.modal.alertError("系统错误");
+                        $.modal.msgError("系统错误");
                         $.modal.closeLoading();
                     }
                 };

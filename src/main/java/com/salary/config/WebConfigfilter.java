@@ -62,6 +62,7 @@ public class WebConfigfilter implements WebMvcConfigurer {
         excludePath.add("/v2/api-docs/**");    //swagger接口
         excludePath.add("/api/getVerify");    //开放验证码接口
         excludePath.add("/api/login");    //开放登录接口
+        excludePath.add("/api/*/get**");    //开放get请求接口
         excludePath.add("/css/**");   //css
         excludePath.add("/img/**");   //img
         excludePath.add("/js/**");    //js

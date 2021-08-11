@@ -22,12 +22,16 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Menu {
     private BigInteger menu_id;  //菜单id
-    private String menu_name;    //登录名
+    private String title;    //菜单名称
+    private String menu_type;    //菜单类型
     private BigInteger parent_id;//父菜单id
-    private String url;          //请求地址
+    private String href;          //请求地址
     private String perms;        //权限标识
     private String icon;         //菜单图标
     private String visible;      //菜单状态
+    private String target;       //打开方式
+    private Object child;        //子菜单
+    private String image;        //图片
     private String creater;      //创建者
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date create_time;    //创建时间

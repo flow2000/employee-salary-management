@@ -29,4 +29,15 @@ public class MenuController {
     public AjaxResult getRoleMenu(int role_id){
         return menuService.getRoleMenu(role_id);
     }
+
+    /**
+     * 获取菜单信息
+     * @return 菜单信息
+     */
+    @ApiOperation(value = "获取菜单信息")
+    @ApiImplicitParam()
+    @GetMapping("/getMenu")
+    public AjaxResult getMenu(int role_id){
+        return AjaxResult.returnMessage(menuService.getMenu(role_id));
+    }
 }

@@ -15,7 +15,7 @@ public interface UserService {
 
     AjaxResult login(HttpServletRequest request, Map<String, Object> map);
 
-    AjaxResult init(Map<String, Object> map);
+    AjaxResult init(HttpServletRequest request);
 
     AjaxResult getAllUser();
 

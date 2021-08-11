@@ -6,17 +6,28 @@
  * version: 1.0
  *
  */
-console.log($.common.isExist(localStorage.dasyiuy));
-user = $.cache.get("user");
-console.log(user);
-if($.common.isExist(user)){
-    $.modal.alertError("会话已过期，请重新登录");
+
+if(localStorage.user===undefined){
+    window.top.location="login";
 }
 
+$.operate.post(crx+'/init',{role_id:1},callback);
+function callback(result) {
+    if(result.code===0){
+        $.cache.set("roles",result.data.roles, -1); //将返回的数据存到localStorage并设置过期时间为永久
+        $.cache.set("menus",result.data.menus, -1);
+        $.cache.set("depts",result.data.depts, -1);
+    }
+}
 
+console.log($.cache.get("menus"));
+
+user = $.cache.get('user');
 
 //添加右上角用户名
-document.getElementById("username").innerText = "欢迎 "+$.cache.get('user').user.real_name;
+if(user!==null){
+    document.getElementById("username").innerText = "欢迎 "+user.real_name;
+}
 
 layui.use(['jquery', 'layer', 'miniAdmin'], function () {
 	
@@ -24,7 +35,7 @@ layui.use(['jquery', 'layer', 'miniAdmin'], function () {
         layer = layui.layer,
         miniAdmin = layui.miniAdmin;
     var options = {
-        iniUrl: "/salary/js/init.json",    // 初始化接口
+        iniUrl: crx+"/menu/getMenu?role_id="+user.user.role_id,    // 初始化接口
         clearUrl: "", // 缓存清理接口
         urlHashLocation: true,      // 是否打开hash定位
         bgColorDefault: false,      // 主题默认配置

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -21,10 +23,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TokenServiceImp implements TokenService {
 
-    private static final String TOKEN_SECRET="bf71051b-faec-4f8d-ba45-78158c02a1a8";  //密钥盐
+    private static final String TOKEN_SECRET="lAGC8k";  //密钥盐
     private static final String ISSUER="auth0";  //发行人
     private static final long EXPIRE_TIME= 60 * 60 * 1000;//token到期时间1小时
     private static final int REDIS_TIMEOUT = 1; //redis过期时间1小时
+    SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.CHINA);//格式化CST时间
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -55,10 +58,11 @@ public class TokenServiceImp implements TokenService {
             JWTVerifier jwtVerifier=JWT.require(Algorithm.HMAC256(TOKEN_SECRET))
                     .withIssuer(ISSUER).build();//创建token验证器
             DecodedJWT decodedJWT=jwtVerifier.verify(token);
+            redisTemplate.expire(login_name, REDIS_TIMEOUT, TimeUnit.HOURS); //刷新过期时间
             System.out.println("认证通过：");
             System.out.println("login_name: " + decodedJWT.getClaim("login_name").asString());
-            System.out.println("过期时间：      " + decodedJWT.getExpiresAt());
-            redisTemplate.expire(login_name, REDIS_TIMEOUT, TimeUnit.HOURS);
+            System.out.println("过期时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").
+                    format(decodedJWT.getExpiresAt()) );
         } catch (IllegalArgumentException | JWTVerificationException e) {
             //抛出错误即为验证不通过
             return false;

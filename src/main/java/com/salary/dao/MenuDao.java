@@ -1,5 +1,6 @@
 package com.salary.dao;
 
+import com.salary.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +11,5 @@ import java.util.Map;
 @Repository
 public interface MenuDao {
 
-    List<Map> getRoleMenu(int role_id);
+    List<Menu> getRoleMenu(int role_id);
 }

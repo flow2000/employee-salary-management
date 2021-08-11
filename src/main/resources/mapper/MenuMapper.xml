@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.salary.dao.MenuDao">
 
-    <select id="getRoleMenu" resultType="java.util.HashMap" parameterType="int">
+    <select id="getRoleMenu" resultType="com.salary.entity.Menu" parameterType="int">
         SELECT menu.*
         FROM role_menu,menu
         where role_menu.role_id=#{role_id}
         and role_menu.menu_id=menu.menu_id
+        and menu.menu_type='M'
+        order by order_num asc
     </select>
 
 </mapper>

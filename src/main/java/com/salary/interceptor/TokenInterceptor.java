@@ -29,22 +29,13 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (token!=null&&login_name!=null){
             boolean result= tokenService.verifyToken(login_name,token);
             if (result){
-                System.out.println("通过拦截器");
+                System.out.println();
                 return true;
             }
         }
         //权限认证，后面再写
 
-        response.setContentType("application/json; charset=utf-8");
-        try {
-            JSONObject json=new JSONObject();
-            json.put("msg","token verify fail");
-            json.put("code","500");
-            response.getWriter().append(json.toString());
-            System.out.println("认证失败，未通过拦截器");
-        } catch (Exception e) {
-            return false;
-        }
+        response.sendRedirect("/salary/login"); //回到登录界面
         return false;
     }
 }

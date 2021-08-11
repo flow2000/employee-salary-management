@@ -49,8 +49,8 @@ public class UserController {
     @ApiOperation(value = "项目初始化")
     @ApiImplicitParam()
     @PostMapping("/init")
-    public AjaxResult init(@RequestBody Map<String, Object> map) {
-        return userService.init(map);
+    public AjaxResult init(HttpServletRequest request) {
+        return userService.init(request);
     }
 
     /**
