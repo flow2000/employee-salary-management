@@ -11,12 +11,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" th:href="@{favicon.ico}" />
-    <link rel="bookmark" th:href="@{favicon.ico}" />
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
-    <link th:href="@{/css/layuimini.css}" rel="stylesheet"/>
-    <link th:href="@{/css/default.css}" rel="stylesheet"/>
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" />
+    <link rel="bookmark" th:href="@{/favicon.ico}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/libs/font-awesome/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/libs/layuimini/css/themes/default.css}">
+    <link rel="stylesheet" th:href="@{/libs/layuimini/css/layuimini.css}">
+    <link rel="stylesheet" th:href="@{/libs/layuimini/css/public.css}">
+    <link rel="stylesheet" th:href="@{/css/ry-ui.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <title th:text="${title}"></title>
 </head>
 

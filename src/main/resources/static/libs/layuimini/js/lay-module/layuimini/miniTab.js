@@ -1,6 +1,6 @@
 /**
- * date:2021/08/3
- * author:庞海
+ * date:2020/02/27
+ * author:Mr.Chung
  * version:2.0
  * description:layuimini tab框架扩展
  */

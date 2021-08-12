@@ -56,6 +56,7 @@ public class WebConfigfilter implements WebMvcConfigurer {
         //排除拦截
         excludePath.add("/login");    //登录
         excludePath.add("/index");    //首页
+        excludePath.add("/favicon.ico");    //图标
         excludePath.add("/swagger-resources/**");    //swagger资源
         excludePath.add("/swagger-ui.html/**");    //swagger
         excludePath.add("/webjars/**");    //swagger的js

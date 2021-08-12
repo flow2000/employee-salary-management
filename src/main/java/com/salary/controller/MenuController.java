@@ -37,7 +37,7 @@ public class MenuController {
     @ApiOperation(value = "获取菜单信息")
     @ApiImplicitParam()
     @GetMapping("/getMenu")
-    public AjaxResult getMenu(int role_id){
-        return AjaxResult.returnMessage(menuService.getMenu(role_id));
+    public Object getMenu(int role_id){
+        return menuService.getMenu(role_id);
     }
 }

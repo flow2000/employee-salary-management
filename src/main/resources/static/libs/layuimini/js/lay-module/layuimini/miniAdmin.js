@@ -1,6 +1,6 @@
 /**
- * date:2021/08/3
- * author:庞海
+ * date:2020/02/27
+ * author:Mr.Chung
  * version:2.0
  * description:layuimini 主体框架扩展
  */
@@ -256,7 +256,7 @@ layui.define(["jquery", "miniMenu", "element","miniTab", "miniTheme"], function 
                 if (clearUrl != undefined && clearUrl != '' && clearUrl != null) {
                     $.getJSON(clearUrl, function (data, status) {
                         layer.close(loading);
-                        if (data.code != 0) {
+                        if (data.code != 1) {
                             return miniAdmin.error(data.msg);
                         } else {
                             return miniAdmin.success(data.msg);

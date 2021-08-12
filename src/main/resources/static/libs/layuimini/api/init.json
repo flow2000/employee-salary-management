@@ -1,0 +1,132 @@
+{
+    "menuInfo": [
+        {
+            "title": "",
+            "icon": "fa fa-address-book",
+            "href": "",
+            "target": "_self",
+            "child": [
+                {
+                    "title": "主页",
+                    "icon": "fa fa-home",
+                    "href": "welcome/welcome.html",
+                    "target": "_self",
+                    "child": null
+                },
+                {
+                    "title": "用户管理",
+                    "href": "user/userInfo.html",
+                    "icon": "fa fa-calendar",
+                    "target": "_self",
+                    "child": []
+                },
+                {
+                    "title": "仪器管理",
+                    "icon": "fa fa-street-view",
+                    "href": "machine/machine.html",
+                    "target": "_self",
+                    "child": null
+                },
+                {
+                    "title": "审核管理",
+                    "icon": "fa fa-comments-o",
+                    "href": "",
+                    "target": "_self",
+                    "child": [
+                        {
+                            "title": "审核预约",
+                            "icon": "fa fa-comments-o",
+                            "href": "booking/checkBooking.html",
+                            "target": "_self",
+                            "child": null
+                        },
+                        {
+                            "title": "审核记录",
+                            "icon": "fa fa-comments-o",
+                            "href": "booking/checkLog.html",
+                            "target": "_self",
+                            "child": null
+                        }
+                    ]
+                },
+                {
+                    "title": "实验室管理",
+                    "icon": "fa fa-file-text",
+                    "href": "lab/lab.html",
+                    "target": "_self",
+                    "child": null
+                },
+                {
+                    "title": "角色管理",
+                    "icon": "fa fa-file-text",
+                    "href": "role/role.html",
+                    "target": "_self",
+                    "child": null
+                },
+                {
+                    "title": "分类管理",
+                    "icon": "fa fa-comments-o",
+                    "href": "",
+                    "target": "_self",
+                    "child": [
+                        {
+                            "title": "仪器分类",
+                            "icon": "fa fa-comments-o",
+                            "href": "classify/machineSort.html",
+                            "target": "_self",
+                            "child": null
+                        },
+                        {
+                            "title": "文章分类",
+                            "icon": "fa fa-comments-o",
+                            "href": "classify/articleSort.htm",
+                            "target": "_self",
+                            "child": null
+                        }
+                    ]
+                },
+                {
+                    "title": "用户反馈",
+                    "icon": "fa fa-comments-o",
+                    "href": "suggestion/suggestion.html",
+                    "target": "_self",
+                    "child": null
+                },
+                {
+                    "title": "系统管理",
+                    "icon": "fa fa-comments-o",
+                    "href": "",
+                    "target": "_self",
+                    "child": [
+                        {
+                            "title": "操作日志",
+                            "icon": "fa fa-comments-o",
+                            "href": "sys/operation.html",
+                            "target": "_self",
+                            "child": null
+                        },
+                        {
+                            "title": "设置",
+                            "icon": "fa fa-comments-o",
+                            "href": "sys/settings.html",
+                            "target": "_self",
+                            "child": null
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "homeInfo": {
+        "title": "首页",
+        "icon": null,
+        "href": "welcome/welcome.html",
+        "target": "_self",
+        "child": null
+    },
+    "logoInfo": {
+        "image": "../static/img/logo.png",
+        "href": "",
+        "title": "实验室管理系统"
+    }
+}

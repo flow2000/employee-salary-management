@@ -35,7 +35,7 @@ public class MenuServiceImp implements MenuService {
         menu = new Menu();
         menu.setTitle(" ");
         menu.setIcon("fa fa-address-book");
-        menu.setHref(" ");
+        menu.setHref("#");
         menu.setTarget("_self");
         menu.setChild(menuList);
         list.add(menu);
@@ -43,14 +43,14 @@ public class MenuServiceImp implements MenuService {
 
         menu = new Menu();
         menu.setTitle("首页");
-        menu.setHref("welcome/welcome.html");
+        menu.setHref("system/welcome/welcome");
         menu.setTarget("_self");
         resultMap.put("homeInfo", menu);
 
         menu = new Menu();
         menu.setTitle("工资管理系统");
-        menu.setImage("salary/img/logo.png");
-        menu.setHref(" ");
+        menu.setImage("img/logo.png");
+        menu.setHref("index");
         resultMap.put("logoInfo", menu);
 
         return resultMap;
