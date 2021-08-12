@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title)">
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" th:href="@{favicon.ico}" />
+    <link rel="bookmark" th:href="@{favicon.ico}" />
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/layuimini.css}" rel="stylesheet"/>
+    <link th:href="@{/css/default.css}" rel="stylesheet"/>
+    <title th:text="${title}"></title>
+</head>
+
+<div th:fragment="footer">
+    <script th:src="@{/libs/jquery/jquery.min.js}"></script>
+    <script th:src="@{/libs/bootstrap/bootstrap.min.js}"></script>
+    <!-- bootstrap-table 表格插件 -->
+    <script th:src="@{/libs/bootstrap-table/bootstrap-table.min.js?v=20210602}"></script>
+    <script th:src="@{/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js?v=20210602}"></script>
+    <script th:src="@{/libs/bootstrap-table/extensions/mobile/bootstrap-table-mobile.js?v=20210602}"></script>
+    <!-- 遮罩层 -->
+    <script th:src="@{/libs/blockUI/jquery.blockUI.js}"></script>
+    <script th:src="@{/libs/layer/layer.min.js}"></script>
+    <!-- 方法封装 -->
+    <script type="module" th:src="@{/js/salary.js}"></script>
+</div>
