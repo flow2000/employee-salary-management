@@ -7,7 +7,7 @@
 }
 
 .layui-header > ul > .layui-nav-item.layui-this, .layuimini-tool i:hover {
-    background-color: #197971 !important;
+    background-color: #1E9FFF !important;
 }
 
 .layui-header .layuimini-header-content > ul > .layui-nav-item.layui-this, .layuimini-tool i:hover {
@@ -30,7 +30,7 @@
 
 /**左侧菜单选中-配色*/
 .layui-layout-admin .layui-nav-tree .layui-this, .layui-layout-admin .layui-nav-tree .layui-this > a, .layui-layout-admin .layui-nav-tree .layui-nav-child dd.layui-this, .layui-layout-admin .layui-nav-tree .layui-nav-child dd.layui-this a {
-    background-color: #1aa094 !important;
+    background-color: #1E9FFF !important;
 }
 
 
