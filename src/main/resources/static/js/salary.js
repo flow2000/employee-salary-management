@@ -22,9 +22,9 @@ const modal_status = {
 };
 
 let user = {};
-let role = {};
-let dept = {};
-let menu = {};
+let roles = {};
+let depts = {};
+let menus = {};
 
 const crx="http://localhost:8080/salary/api";
 
@@ -220,32 +220,18 @@ const crx="http://localhost:8080/salary/api";
             jsonGet : function(url, callback) {
                 $.operate.submit(url, "get", "json", "application/json", "", callback);
             },
-        },
-        //选择器封装处理
-        selector: {
-            layer : function(){
-                var layer = null;
-                layui.use(['layer'],function () {
-                    layer = layui.layer;
-                });
-                return layer;
+
+            //input赋值
+            setInput : function (name,value) {
+                $('#'+name).val(value);
             },
 
-            table : function(){
-                var table = null;
-                layui.use(['table'],function () {
-                    table = layui.table;
-                });
-                return table;
+            //单选框赋值
+            setRadio : function (name,value) {
+                $("input[name="+name+"][value=0]").attr("checked",value === '0');
+                $("input[name="+name+"][value=1]").attr("checked",value === '1');
             },
 
-            form : function(){
-                var form = null;
-                layui.use(['form'],function () {
-                    form = layui.form;
-                });
-                return form;
-            },
         },
         //通用方法封装处理
         common: {

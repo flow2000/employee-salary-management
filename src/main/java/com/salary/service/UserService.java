@@ -27,6 +27,10 @@ public interface UserService {
 
     AjaxResult updateUser(Map<String, Object> map);
 
+    AjaxResult updateUserPassword(Map<String, Object> map);
+
+    AjaxResult verifyUserPassword(Map<String, Object> map);
+
     AjaxResult deleteUser(Map<String, Object> map);
 
 }

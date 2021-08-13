@@ -23,6 +23,8 @@ public interface UserDao {
 
     int updateUser(Map<String, Object> map);
 
+    int updateUserPassword(Map<String, Object> map);
+
     int deleteUser(Map<String, Object> map);
 
     List<Menu> getUserPerms(BigInteger user_id);

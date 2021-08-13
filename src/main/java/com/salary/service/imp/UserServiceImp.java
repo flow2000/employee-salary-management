@@ -89,7 +89,7 @@ public class UserServiceImp implements UserService {
         HttpSession session = request.getSession(true);//获得session对象
         String key = session.getId();                     //获得sessionId
         String trueCaptcha = (String) session.getAttribute(key); //拿到正确的验证码
-        if(Objects.equals(trueCaptcha,userCaptcha)){ //比较验证码是否一致
+        if(!Objects.equals(trueCaptcha,userCaptcha)){ //比较验证码是否一致
             User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
             if(user!=null){ //用户不存在
                 DigestPass dp=new DigestPass();  //MD5摘要算法
@@ -114,7 +114,7 @@ public class UserServiceImp implements UserService {
      * 项目初始化
      * @param request 请求参数
      *
-     * @return
+     * @return 可持久化数据
      */
     @Override
     public AjaxResult init(HttpServletRequest request) {
@@ -204,6 +204,38 @@ public class UserServiceImp implements UserService {
     @Override
     public AjaxResult updateUser(Map<String, Object> map) {
         return AjaxResult.toAjax(userDao.updateUser(map));
+    }
+
+    /**
+     * 修改用户密码
+     * @param param 用户信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult updateUserPassword(Map<String, Object> param) {
+        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
+        DigestPass dp=new DigestPass();  //MD5摘要算法
+        String password = dp.getDigestString(param.get("password")+user.getSalt()); //盐加密
+        param.put("password",password);
+        return AjaxResult.toAjax(userDao.updateUserPassword(param));
+    }
+
+    /**
+     * 验证用户密码
+     * @param param 用户信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult verifyUserPassword(Map<String, Object> param) {
+        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
+        if(user!=null){ //用户不存在
+            DigestPass dp=new DigestPass();  //MD5摘要算法
+            String password = dp.getDigestString(param.get("password")+user.getSalt()); //盐加密
+            if(Objects.equals(password,user.getPassword())){
+                return AjaxResult.success();
+            }
+        }
+        return AjaxResult.error("密码错误");
     }
 
     /**

@@ -100,7 +100,7 @@ public class UserController {
      */
     @ApiOperation(value = "获取单个用户信息")
     @ApiImplicitParam()
-    @GetMapping("/user/insertUser")
+    @PostMapping("/user/insertUser")
     public AjaxResult insertUser(@RequestBody Map<String, Object> map){
         return userService.insertUser(map);
     }
@@ -113,9 +113,33 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户信息")
     @ApiImplicitParam()
-    @GetMapping("/user/updateUser")
+    @PostMapping("/user/updateUser")
     public AjaxResult updateUser(@RequestBody Map<String, Object> map){
         return userService.updateUser(map);
+    }
+
+    /**
+     * 修改用户密码
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改用户密码")
+    @ApiImplicitParam()
+    @PostMapping("/user/updateUserPassword")
+    public AjaxResult updateUserPassword(@RequestBody Map<String, Object> map){
+        return userService.updateUserPassword(map);
+    }
+
+    /**
+     * 验证用户密码
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "验证用户密码")
+    @ApiImplicitParam()
+    @PostMapping("/user/verifyUserPassword")
+    public AjaxResult verifyUserPassword(@RequestBody Map<String, Object> map){
+        return userService.verifyUserPassword(map);
     }
 
     /**
@@ -125,7 +149,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除用户信息")
     @ApiImplicitParam()
-    @GetMapping("/user/deleteUser")
+    @PostMapping("/user/deleteUser")
     public AjaxResult deleteUser(@RequestBody Map<String, Object> map){
         return userService.deleteUser(map);
     }

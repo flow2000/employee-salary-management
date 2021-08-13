@@ -28,6 +28,7 @@
     <script th:src="@{/libs/layuimini/js/lay-config.js}"></script>
     <script th:src="@{/libs/blockUI/jquery.blockUI.js}"></script>
     <script th:src="@{/js/salary.js}"></script>
+    <script th:src="@{/libs/md5/md5.js}"></script>
     <title>首页</title>
 </head>
 <body class="layui-layout-body layuimini-all">
@@ -115,20 +116,20 @@
 </div>
 
 //编辑基本资料
-<div class="layui-form layuimini-form" id="uodateUserInfo" style="margin-top: 3%; display:none; text-align: center;">
-    <input id="id" type="text" value="" style="display: none"/>
+<form class="layui-form layuimini-form" id="updateUserInfo" style="margin-top: 3%; display:none; text-align: center;">
+    <input id="user_id" type="text" value="" style="display: none"/>
 
     <div class="layui-form-item" >
-        <label class="layui-form-label required">登录名：</label>
+        <label class="layui-form-label">登录名：</label>
         <div class="layui-input-block" style="width: 50%;">
-            <input type="text" id="user_id" value="" class="layui-input" readonly />
+            <input type="text" id="login_name" value="" class="layui-input" readonly style="border: none" />
         </div>
     </div>
 
     <div class="layui-form-item" >
-        <label class="layui-form-label required">角色名：</label>
+        <label class="layui-form-label">角色名：</label>
         <div class="layui-input-block" style="width: 50%;">
-            <input type="text" id="role_name" value="" class="layui-input" readonly/>
+            <input type="text" id="role_name" value="" class="layui-input" readonly style="border: none" />
         </div>
     </div>
 
@@ -149,7 +150,7 @@
     <div class="layui-form-item" >
         <label class="layui-form-label required">手机号：</label>
         <div class="layui-input-block" style="width: 50%;">
-            <input type="text" id="user_phone" value="" class="layui-input" />
+            <input type="text" id="phone_number" value="" class="layui-input" />
         </div>
     </div>
 
@@ -167,7 +168,7 @@
             <input type="text" id="email" value="" class="layui-input" />
         </div>
     </div>
-</div>
+</form>
 
 //修改密码
 <div class="layui-form layuimini-form"  id="updateUser" style="margin-top: 3%; display:none; text-align: center;">
@@ -194,23 +195,27 @@
 </div>
 
 <script type="text/javascript">
-    if(localStorage.user===undefined){
+    if(localStorage.user===undefined||localStorage.user===null){
         window.top.location="login";
     }
     user = $.cache.get('user');
-    $.operate.post(crx+'/init',{role_id:user.user.role_id},callback);
-    function callback(result) {
-        if(result.code===0){
-            $.cache.set("roles",result.data.roles, -1); //将返回的数据存到localStorage并设置过期时间为永久
-            $.cache.set("menus",result.data.menus, -1);
-            $.cache.set("depts",result.data.depts, -1);
+    document.getElementById("userName").innerText = (user.user.real_name);
+    if($.cache.get('roles')===null||$.cache.get('menus')===null||$.cache.get('depts')===null){
+        $.operate.post(crx+'/init',{role_id:user.user.role_id},callback);
+        function callback(result) {
+            if(result.code===0){
+                $.cache.set("roles",result.data.roles, -1); //将返回的数据存到localStorage并设置过期时间为永久
+                $.cache.set("menus",result.data.menus, -1);
+                $.cache.set("depts",result.data.depts, -1);
+            }
         }
     }
 
-    layui.use(['jquery', 'layer', 'miniAdmin'], function () {
+    layui.use(['jquery', 'layer', 'miniAdmin','form'], function () {
 
         var $ = layui.jquery,
             layer = layui.layer,
+            form = layui.form,
             miniAdmin = layui.miniAdmin;
         var options = {
             iniUrl: crx+"/menu/getMenu?role_id="+user.user.role_id,    // 初始化接口
@@ -232,8 +237,116 @@
                 window.top.location = 'login';
             });
         });
-    });
 
+        //修改资料
+        $("#personInfo").click(function() {
+            layer.open({
+                type: 1,
+                title: ["个人信息", "font-size:14px"],
+                area: ["25%", "70%"],
+                btn: ['保存', '取消'],
+                content: $("#updateUserInfo"),
+                btnAlign: "c",
+                success:function(index,layero){  //用户信息赋值
+                    $.operate.get(crx+'/user/getOneUser?login_name='+user.user.login_name,function (result) {
+                        var user = result.data;
+                        $.operate.setInput("user_id",user.user_id);
+                        $.operate.setInput("login_name",user.login_name);
+                        $.operate.setInput("role_name",user.role_name);
+                        $.operate.setInput("real_name",user.real_name);
+                        $.operate.setInput("user_name",user.user_name);
+                        $.operate.setInput("phone_number",user.phone_number);
+                        $.operate.setRadio('sex',user.sex);
+                        $.operate.setInput("email",user.email);
+                        form.render();
+                    });
+                },
+                yes: function(index, layero) {
+                    var send = {
+                        "user_id": $("#user_id").val(),
+                        "real_name": $("#real_name").val(),
+                        "user_name": $("#user_name").val(),
+                        "phone_number": $("#phone_number").val(),
+                        "sex": $("input[name='sex']:checked").val(),
+                        "email": $("#email").val(),
+                        "updater": user.user.user_id,
+                    };
+                    $.operate.jsonPost(crx+"/user/updateUser",JSON.stringify(send),function (result) {
+                        if(result.code!==0){
+                            $.modal.msgError(result.msg);
+                        }else{
+                            $.modal.msgSuccess(result.msg);
+                        }
+                        $('#updateUserInfo')[0].reset();
+                        layer.close(index);
+                    });
+                }
+            })
+        });
+
+        //修改密码
+        $("#updatePassword").click(function() {
+            layer.open({
+                type: 1,
+                title: ["修改密码", "font-size:14px"],
+                area: ["25%", "40%"],
+                btn: ['修改', '取消'],
+                content: $("#updateUser"),
+                btnAlign: "c",
+                yes: function(index, layero) {
+                    var old_password = $("#old_password").val();
+                    var new_password = $("#new_password").val();
+                    var two_password = $("#two_password").val();
+                    if(old_password===""||new_password===""||two_password===""){
+                        $.modal.msgError("密码不能为空");
+                        return;
+                    }
+                    if(new_password!==two_password){
+                        $.modal.msgError("密码不一致");
+                        return ;
+                    }
+                    var send = {
+                        "user_id": user.user.user_id,
+                        "login_name":user.user.login_name,
+                        "password":hex_md5(new_password),
+                        "updater": user.user.user_id,
+                    };
+                    $.operate.jsonPost(crx+'/user/updateUserPassword',JSON.stringify(send),function (result) {
+                        if(result.code===0){
+                            $.modal.msgSuccess('修改成功',function () {
+                                window.top.location = 'login';
+                            });
+                        }else{
+                            $.modal.msgError("密码错误");
+                        }
+                    });
+                    layer.close(index);
+                }
+            })
+        });
+
+        //验证原密码
+        $("#old_password").blur(function() {
+            var old_password = $("#old_password");
+            if(old_password.val()!==""){
+                var login_name =  user.user.login_name;
+                if(login_name===""){
+                    $.modal.alertError('请重试');
+                    window.location.reload();
+                }
+                var send={
+                    "login_name":login_name,
+                    "password":hex_md5(old_password.val())
+                };
+                $.operate.jsonPost(crx+"/user/verifyUserPassword",JSON.stringify(send),function(result){
+                    if(result.code!==0){
+                        layer.msg(result.msg);
+                        $("#old_password").val("");
+                    }
+                });
+            }
+        });
+    });
 </script>
 </body>
 </html>
