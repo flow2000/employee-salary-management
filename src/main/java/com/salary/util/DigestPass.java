@@ -34,13 +34,13 @@ public class DigestPass {
         }
 
         //将结果转换成字符串 ; result清空，否则它会自动累加!
-        String resultStr = "";
+        StringBuilder resultStr = new StringBuilder();
         for (byte byteArg : byteArgs) {
-            resultStr += Integer.
+            resultStr.append(Integer.
                     toHexString((0x000000ff & byteArg) | 0xffffff00)
-                    .substring(6);
+                    .substring(6));
         }
-        return resultStr;
+        return resultStr.toString();
     }
 
 }

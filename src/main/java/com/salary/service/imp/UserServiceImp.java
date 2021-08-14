@@ -34,8 +34,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class UserServiceImp implements UserService {
 
-    private static final String CACHE_NAME_USER = "users";
     private static final int REDIS_TIMEOUT = 1; //redis过期时间1小时
+    private static final String PASSWORD = "password"; //用户密码标识符
 
     @Autowired
     private UserDao userDao;
@@ -93,7 +93,7 @@ public class UserServiceImp implements UserService {
             User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
             if(user!=null){ //用户不存在
                 DigestPass dp=new DigestPass();  //MD5摘要算法
-                String password = dp.getDigestString(param.get("password")+user.getSalt()); //盐加密
+                String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
                 if(Objects.equals(password,user.getPassword())){ //数据库的密码与盐加密后的密码比较是否一致
                     Map<String, Object> map = new HashMap<>();
                     user.setPassword("******");
@@ -144,7 +144,7 @@ public class UserServiceImp implements UserService {
         List<Map> list = userDao.getAllUser();
         for (int i = 0; i < list.size(); i++) {
             Map<String,Object> map = list.get(i);
-            map.put("password","******");
+            map.put(PASSWORD,"******");
             list.set(i,map);
         }
         return AjaxResult.returnMessage(list);
@@ -163,7 +163,7 @@ public class UserServiceImp implements UserService {
         List<Map> userList = userDao.getPageUser(page,limit); //拼接sql语句
         for (int i = 0; i < userList.size(); i++) {
             Map<String,Object> map = userList.get(i);
-            map.put("password","******");
+            map.put(PASSWORD,"******");
             userList.set(i,map);
         }
         return AjaxResult.returnMessage(new PageInfo<>(userList)); //将分页结果放入pageUserList
@@ -215,8 +215,8 @@ public class UserServiceImp implements UserService {
     public AjaxResult updateUserPassword(Map<String, Object> param) {
         User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
         DigestPass dp=new DigestPass();  //MD5摘要算法
-        String password = dp.getDigestString(param.get("password")+user.getSalt()); //盐加密
-        param.put("password",password);
+        String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
+        param.put(PASSWORD,password);
         return AjaxResult.toAjax(userDao.updateUserPassword(param));
     }
 
@@ -230,7 +230,7 @@ public class UserServiceImp implements UserService {
         User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
         if(user!=null){ //用户不存在
             DigestPass dp=new DigestPass();  //MD5摘要算法
-            String password = dp.getDigestString(param.get("password")+user.getSalt()); //盐加密
+            String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
             if(Objects.equals(password,user.getPassword())){
                 return AjaxResult.success();
             }

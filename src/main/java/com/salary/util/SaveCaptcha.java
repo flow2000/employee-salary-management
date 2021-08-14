@@ -11,11 +11,11 @@ import javax.servlet.http.HttpSession;
  */
 public class SaveCaptcha {
 
-    public static int MaxImgCodeActiveTime = 600; 	//验证码有效期：600秒
-    public static int ImgWidth = 100; 				//图片宽度
-    public static int ImgHeight = 40; 				//图片高度
-    public static int CodeCount = 4; 				//验证码字符数
-    public static int LineWidth = 2; 				//干扰线宽度
+    public static final int MaxImgCodeActiveTime = 600; 	//验证码有效期：600秒
+    public static final int ImgWidth = 100; 				//图片宽度
+    public static final int ImgHeight = 40; 				//图片高度
+    public static final int CodeCount = 4; 				//验证码字符数
+    public static final int LineWidth = 2; 				//干扰线宽度
 
     /**
      * 生成一张验证码图片
@@ -23,12 +23,11 @@ public class SaveCaptcha {
      * @return 验证码图片
      */
     public static ShearCaptcha getCaptcha(){
-        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(
+        return CaptchaUtil.createShearCaptcha(
                 ImgWidth,   //图片宽度
                 ImgHeight,  //图片高度
                 CodeCount,  //验证码字符数
-                LineWidth); //干扰线宽度
-        return captcha;
+                LineWidth);
     }
 
     /**
