@@ -21,12 +21,26 @@ const modal_status = {
     WARNING: "warning"
 };
 
+/** 用户信息过期时间60分钟 */
+const expire_user = 60 * 60 * 1000;
+
 let user = {};
 let roles = {};
 let depts = {};
 let menus = {};
 
 const crx="http://localhost:8080/salary/api";
+
+// 当前table相关信息
+var table = {
+    options:{},
+};
+
+//提交方式
+var submitType={
+    form:'application/x-www-form-urlencoded',
+    json:'application/json'
+};
 
 (function ($) {
     $.extend({
@@ -44,7 +58,7 @@ const crx="http://localhost:8080/salary/api";
                 window.localStorage.setItem(key,JSON.stringify(obj));
             },
 
-            //取出对象 不存在或者过期返回null，
+            //取出对象 不存在或者过期返回null，存在刷新时间并返回结果
             get : function (key) {
                 var val = localStorage.getItem(key);
                 if (!$.common.isExist(val)) {
@@ -58,19 +72,55 @@ const crx="http://localhost:8080/salary/api";
                     localStorage.removeItem(key);
                     return null;
                 }
+                $.cache.set(key,val.data,expire_user); //刷新过期时间
                 return val.data;
             },
 
             //项目初始化
             init : function () {
-                $.operate.post(crx+'/init',callback);
-                function callback(result) {
+                $.operate.post(crx+'/init',{role_id:user.user.role_id},function (result) {
+                    if(result.code===0){
+                        $.cache.set("roles",result.data.roles, -1); //将返回的数据存到localStorage并设置过期时间为永久
+                        $.cache.set("menus",result.data.menus, -1);
+                        $.cache.set("depts",result.data.depts, -1);
+                    }
+                });
 
-                }
             },
         },
         // 表格封装处理
-        table:{},
+        table:{
+            init : function (options) {
+                table.options = options;
+                layui.use('table',function () {
+                    var table = layui.table;
+                    //渲染表格
+                    table.render({
+                        elem: options.elem,
+                        url: options.url,
+                        toolbar: options.toolbar,
+                        headers:options.headers,
+                        defaultToolbar: options.defaultToolbar,
+                        cols: [options.cols],
+                        parseData: options.parseData,
+                        done:function(res){
+                            $('th').each(function(index,element){
+                                $(element).attr('title',$(element).text());
+                            });
+                            $('td').each(function(index,element){
+                                $(element).attr('title',$(element).text());
+                            });
+                        },
+                        limits: [10, 15, 20, 25, 50, 100],
+                        limit: 10,
+                        page: true,
+                        skin: 'row',
+                        even: true
+                    });
+                });
+
+            }
+        },
         // 弹出层封装处理
         modal: {
             // 显示图标
@@ -87,25 +137,30 @@ const crx="http://localhost:8080/salary/api";
                 }
                 return icon;
             },
-            // 弹出提示
-            alert : function(content, type) {
+            // 弹出提示,默认刷新子页面
+            alert : function(content, type, a) {
                 layer.alert(content, {
                     icon: $.modal.icon(type),
                     title: "系统提示",
                     btn: ['确认'],
                     btnclass: ['btn btn-primary'],
+                },function () {
+                    if( typeof a==='function')
+                        a();
+                    else
+                        location.reload();
                 });
             },
-            // 消息提示
+            // 消息提示,默认刷新子页面
             msg : function(content, type, a) {
-                if (type !== undefined) {
-                    if( typeof a==='function'){
-                        layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 }, function () {a()});
-                    }else{
-                        layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 });
-                    }
-                } else {
-                    layer.msg(content);
+                if( typeof a==='function'){
+                    layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 }, function () {
+                        if( typeof a==='function'){
+                            a();
+                        } else{
+                            location.reload();
+                        }
+                    });
                 }
             },
             // 错误消息
@@ -203,22 +258,22 @@ const crx="http://localhost:8080/salary/api";
 
             //post请求
             post : function(url, data, callback) {
-                $.operate.submit(url, "post", "json","application/x-www-form-urlencoded", data, callback);
+                $.operate.submit(url, "post", "json",submitType.form, data, callback);
             },
 
             //get请求
             get : function(url, callback) {
-                $.operate.submit(url, "get", "json", "application/x-www-form-urlencoded", "", callback);
+                $.operate.submit(url, "get", "json", submitType.form, "", callback);
             },
 
             //post传输json数据格式请求
             jsonPost : function(url, data, callback) {
-                $.operate.submit(url, "post", "json","application/json", data, callback);
+                $.operate.submit(url, "post", "json",submitType.json, data, callback);
             },
 
             //get传输json数据格式请求
             jsonGet : function(url, callback) {
-                $.operate.submit(url, "get", "json", "application/json", "", callback);
+                $.operate.submit(url, "get", "json", submitType.json, "", callback);
             },
 
             //input赋值

@@ -21,12 +21,14 @@
     <link rel="stylesheet" th:href="@{/libs/layuimini/css/public.css}">
     <link rel="stylesheet" th:href="@{/css/ry-ui.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/table.css}">
     <title th:text="${title}"></title>
 </head>
 
 <div th:fragment="footer">
     <script th:src="@{/libs/jquery/jquery.min.js}"></script>
     <script th:src="@{/libs/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/libs/layui/layui.js}"></script>
     <!-- bootstrap-table 表格插件 -->
     <script th:src="@{/libs/bootstrap-table/bootstrap-table.min.js?v=20210602}"></script>
     <script th:src="@{/libs/bootstrap-table/locale/bootstrap-table-zh-CN.min.js?v=20210602}"></script>
@@ -34,6 +36,8 @@
     <!-- 遮罩层 -->
     <script th:src="@{/libs/blockUI/jquery.blockUI.js}"></script>
     <script th:src="@{/libs/layer/layer.min.js}"></script>
+    <!--  layui插件  -->
+    <script th:src="@{/libs/layuimini/js/lay-config.js}"></script>
     <!-- 方法封装 -->
-    <script type="module" th:src="@{/js/salary.js}"></script>
+    <script th:src="@{/js/salary.js}"></script>
 </div>

@@ -1,10 +1,18 @@
 /*设置数据表表头*/
 .layui-table th {
-	text-align: center;
-	/*表头居中*/
+	text-align: center;/*表头居中*/
 }
 
 .layui-table td {
-	text-align: center;
-	/*表格数据居中*/
+	text-align: center;/*表格数据居中*/
+}
+
+.layui-table-cell {
+	height: 35px;
+	line-height: 35px;
+	font-size: 13px;
+}
+
+.layui-table-tool {
+	background-color: #FFFFFF;/* 表格头部工具栏背景色 */
 }
