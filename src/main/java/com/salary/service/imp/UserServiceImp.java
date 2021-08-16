@@ -15,6 +15,7 @@ import com.salary.service.UserService;
 import com.salary.util.AjaxResult;
 import com.salary.util.DigestPass;
 import com.salary.util.SaveCaptcha;
+import com.salary.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -161,11 +162,7 @@ public class UserServiceImp implements UserService {
     public AjaxResult getPageUser(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);//开始分页
         List<Map> userList = userDao.getPageUser(page,limit); //拼接sql语句
-        for (int i = 0; i < userList.size(); i++) {
-            Map<String,Object> map = userList.get(i);
-            map.put(PASSWORD,"******");
-            userList.set(i,map);
-        }
+        resetUserPassword(userList);
         return AjaxResult.returnMessage(new PageInfo<>(userList)); //将分页结果放入pageUserList
     }
 
@@ -182,6 +179,48 @@ public class UserServiceImp implements UserService {
         return AjaxResult.returnMessage(user);
     }
 
+    /**
+     * 修改个人信息
+     * @param map 个人信息
+     *
+     * @return 影响的行数
+     */
+    @Override
+    public AjaxResult updatePerson(Map<String, Object> map) {
+        return AjaxResult.toAjax(userDao.updatePerson(map));
+    }
+
+    /**
+     * 修改个人密码
+     * @param param 个人信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult updatePersonPassword(Map<String, Object> param) {
+        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
+        DigestPass dp=new DigestPass();  //MD5摘要算法
+        String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
+        param.put(PASSWORD,password);
+        return AjaxResult.toAjax(userDao.updatePersonPassword(param));
+    }
+
+    /**
+     * 验证个人密码
+     * @param param 个人信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult verifyPersonPassword(Map<String, Object> param) {
+        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
+        if(user!=null){ //用户不存在
+            DigestPass dp=new DigestPass();  //MD5摘要算法
+            String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
+            if(Objects.equals(password,user.getPassword())){
+                return AjaxResult.success();
+            }
+        }
+        return AjaxResult.error("密码错误");
+    }
 
 
     /**
@@ -196,46 +235,20 @@ public class UserServiceImp implements UserService {
     }
 
     /**
-     * 修改用户信息
-     * @param map 用户信息
-     *
-     * @return 影响的行数
+     * 搜索用户
+     * @param page 页码
+     * @param limit 数量
+     * @param searchKey 字段
+     * @param searchValue 字段值
+     * @return 查询结果
      */
     @Override
-    public AjaxResult updateUser(Map<String, Object> map) {
-        return AjaxResult.toAjax(userDao.updateUser(map));
-    }
-
-    /**
-     * 修改用户密码
-     * @param param 用户信息
-     * @return 成功或者失败消息
-     */
-    @Override
-    public AjaxResult updateUserPassword(Map<String, Object> param) {
-        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
-        DigestPass dp=new DigestPass();  //MD5摘要算法
-        String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
-        param.put(PASSWORD,password);
-        return AjaxResult.toAjax(userDao.updateUserPassword(param));
-    }
-
-    /**
-     * 验证用户密码
-     * @param param 用户信息
-     * @return 成功或者失败消息
-     */
-    @Override
-    public AjaxResult verifyUserPassword(Map<String, Object> param) {
-        User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
-        if(user!=null){ //用户不存在
-            DigestPass dp=new DigestPass();  //MD5摘要算法
-            String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
-            if(Objects.equals(password,user.getPassword())){
-                return AjaxResult.success();
-            }
-        }
-        return AjaxResult.error("密码错误");
+    public AjaxResult searchUser(int page, int limit, String searchKey, String searchValue) {
+        PageHelper.startPage(page, limit); //开始分页
+        List<Map> queryList = StringUtils.strToMapList(searchKey,searchValue);
+        List<Map> userList = userDao.searchUser(queryList); //拼接sql语句
+        resetUserPassword(userList);
+        return AjaxResult.returnMessage(new PageInfo<>(userList)); //将分页结果放入pageUserList
     }
 
     /**
@@ -249,4 +262,27 @@ public class UserServiceImp implements UserService {
         return AjaxResult.toAjax(userDao.deleteUser(map));
     }
 
+    /**
+     * 修改用户信息
+     * @param map 用户信息
+     *
+     * @return 影响的行数
+     */
+    @Override
+    public AjaxResult updateUser(Map<String, Object> map) {
+        userDao.updateUserRole(map);
+        return AjaxResult.toAjax(userDao.updateUser(map));
+    }
+
+    /**
+     * 将用户密码重置
+     * @param userList 用户数组
+     */
+    void resetUserPassword(List<Map> userList){
+        for (int i = 0; i < userList.size(); i++) {
+            Map map = userList.get(i);
+            map.put(PASSWORD,"******");
+            userList.set(i,map);
+        }
+    }
 }

@@ -19,13 +19,20 @@ public interface UserDao {
 
     User getOneUser(String login_name);
 
+    int updatePerson(Map<String, Object> map);
+
+    int updatePersonPassword(Map<String, Object> map);
+
     int insertUser(Map<String, Object> map);
 
-    int updateUser(Map<String, Object> map);
-
-    int updateUserPassword(Map<String, Object> map);
+    List<Map> searchUser(List<Map> queryList);
 
     int deleteUser(Map<String, Object> map);
 
     List<Menu> getUserPerms(BigInteger user_id);
+
+    int updateUser(Map<String, Object> map);
+
+    int updateUserRole(Map<String, Object> map);
+
 }

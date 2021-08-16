@@ -91,8 +91,6 @@ public class UserController {
         return userService.getOneUser(login_name);
     }
 
-
-
     /**
      * 添加用户信息
      * @param map 用户信息
@@ -107,6 +105,58 @@ public class UserController {
 
 
     /**
+     * 搜索用户
+     * @param page 页码
+     * @param limit 数量
+     * @param searchKey 字段
+     * @param searchValue 字段值
+     * @return 查询结果
+     */
+    @ApiOperation(value = "搜索用户")
+    @ApiImplicitParam
+    @GetMapping("/user/searchUser")
+    public AjaxResult searchUser(@RequestParam int page,@RequestParam int limit,
+                                   @RequestParam String searchKey,@RequestParam String searchValue){
+        return  userService.searchUser(page,limit,searchKey,searchValue);
+    }
+
+    /**
+     * 修改个人信息
+     * @param map 个人信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改个人信息")
+    @ApiImplicitParam()
+    @PostMapping("/user/updatePerson")
+    public AjaxResult updatePerson(@RequestBody Map<String, Object> map){
+        return userService.updatePerson(map);
+    }
+
+    /**
+     * 修改个人密码
+     * @param map 个人信息-
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改个人密码")
+    @ApiImplicitParam()
+    @PostMapping("/user/updatePersonPassword")
+    public AjaxResult updateUPersonPassword(@RequestBody Map<String, Object> map){
+        return userService.updatePersonPassword(map);
+    }
+
+    /**
+     * 验证个人密码
+     * @param map 个人信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "验证个人密码")
+    @ApiImplicitParam()
+    @PostMapping("/user/verifyPersonPassword")
+    public AjaxResult verifyPersonPassword(@RequestBody Map<String, Object> map){
+        return userService.verifyPersonPassword(map);
+    }
+
+    /**
      * 修改用户信息
      * @param map 用户信息
      * @return 成功或者失败消息
@@ -118,29 +168,6 @@ public class UserController {
         return userService.updateUser(map);
     }
 
-    /**
-     * 修改用户密码
-     * @param map 用户信息
-     * @return 成功或者失败消息
-     */
-    @ApiOperation(value = "修改用户密码")
-    @ApiImplicitParam()
-    @PostMapping("/user/updateUserPassword")
-    public AjaxResult updateUserPassword(@RequestBody Map<String, Object> map){
-        return userService.updateUserPassword(map);
-    }
-
-    /**
-     * 验证用户密码
-     * @param map 用户信息
-     * @return 成功或者失败消息
-     */
-    @ApiOperation(value = "验证用户密码")
-    @ApiImplicitParam()
-    @PostMapping("/user/verifyUserPassword")
-    public AjaxResult verifyUserPassword(@RequestBody Map<String, Object> map){
-        return userService.verifyUserPassword(map);
-    }
 
     /**
      * 删除用户信息

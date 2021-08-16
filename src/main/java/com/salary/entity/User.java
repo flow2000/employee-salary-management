@@ -32,6 +32,7 @@ public class User {
     private String role_name;   //角色名称
     private String real_name;   //真实姓名
     private String sex;         //性别
+    private String age;         //年龄
     private String email;       //邮箱
     private String phone_number;//手机号
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")

@@ -25,12 +25,16 @@ public interface UserService {
 
     AjaxResult insertUser(Map<String, Object> map);
 
-    AjaxResult updateUser(Map<String, Object> map);
+    AjaxResult searchUser(int page, int limit, String searchKey, String searchValue);
 
-    AjaxResult updateUserPassword(Map<String, Object> map);
+    AjaxResult updatePerson(Map<String, Object> map);
 
-    AjaxResult verifyUserPassword(Map<String, Object> map);
+    AjaxResult updatePersonPassword(Map<String, Object> map);
+
+    AjaxResult verifyPersonPassword(Map<String, Object> map);
 
     AjaxResult deleteUser(Map<String, Object> map);
+
+    AjaxResult updateUser(Map<String, Object> map);
 
 }

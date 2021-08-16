@@ -1,7 +1,7 @@
 package com.salary.util;
 
 
-import java.util.Random;
+import java.util.*;
 
 public class StringUtils {
     private final static String toUpperStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -10,18 +10,46 @@ public class StringUtils {
 
     private final static String num = "0123456789";
 
+    private final static String TYPE = "searchType";
+
+    private final static String CONTENT = "searchContent";
+
     /**
      * 生成随机盐
      * @return 盐
      */
     public static String getSalt(){
-        String salt = new String();
+        String salt = "";
         String str = toLowerStr+toUpperStr+num;
         for (int i = 0; i < 6; i++) {
             char ch = str.charAt(new Random().nextInt(str.length()));
             salt += ch;
         }
         return salt;
+    }
+
+    public static List<Map> strToMapList(String searchKey, String searchValue){
+        String[] keyArray = searchKey.split(";");
+        String[] valueArray = searchValue.split(";"); //字符串转数组
+        List<Map> list = new ArrayList<>();
+        for (int i = 0; i < keyArray.length && i<valueArray.length; i++) {
+            Map<String,Object> map = new HashMap<>();
+            if(!isEmpty(keyArray[i]) && !isEmpty(valueArray[i]) ){ //不为空
+                map.put(TYPE,keyArray[i]);
+                map.put(CONTENT,valueArray[i]);
+                list.add(map);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 判断字符串是否为空，是则返回true，不是则返回false
+     * @param str 字符串
+     * @return 布尔值
+     */
+    public static boolean isEmpty(String str){
+        return str==null||"".equals(str);
     }
 
 }
