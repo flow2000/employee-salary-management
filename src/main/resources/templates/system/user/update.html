@@ -2,8 +2,72 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head th:replace="header :: header('用户修改')"></head>
 <body>
-
 <div th:replace="header :: footer"></div>
-update
+<!-- 编辑用户信息 -->
+<form class="layui-form layuimini-form"  id="updateUser">
+    <input type="text" id="user_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label" >登录名：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="login_name" value="" class="form-control" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">部门：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="dept_id" >
+                <option value="">未知</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">角色：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="role_id" >
+                <option value="">未知</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">手机：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="phone_number" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="email" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="sex" >
+                <option value="0">未知</option>
+                <option value="2">男</option>
+                <option value="1">女</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="age" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="remark" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+</script>
 </body>
 </html>

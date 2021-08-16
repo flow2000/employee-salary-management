@@ -3,33 +3,36 @@
 <mapper namespace="com.salary.dao.UserDao">
 
     <select id="getAllUser" resultType="java.util.HashMap">
-        select user.*,role.role_id,role_key,role_name
-        from user,role,user_role
-        where user_role.user_id=user.user_id
-        and role.role_id=user_role.role_id
-        and user.del_flag=0
-        and user.status=0
-        order by create_time desc
+        SELECT user.*,dept_name,leader,role.role_id,role_key,role_name
+        FROM user
+        LEFT JOIN dept ON dept.dept_id=user.dept_id
+        LEFT JOIN user_role ON user_role.user_id=user.user_id
+        LEFT JOIN role ON role.role_id=user_role.role_id
+        WHERE user.del_flag=0
+        AND user.status=0
+        ORDER BY create_time DESC
     </select>
 
     <select id="getPageUser" resultType="java.util.HashMap">
-        select user.*,role.role_id,role_key,role_name
-        from user,role,user_role
-        where user_role.user_id=user.user_id
-        and role.role_id=user_role.role_id
-        and user.del_flag=0
-        and user.status=0
-        order by create_time desc
+        SELECT user.*,dept_name,leader,role.role_id,role_key,role_name
+        FROM user
+        LEFT JOIN dept ON dept.dept_id=user.dept_id
+        LEFT JOIN user_role ON user_role.user_id=user.user_id
+        LEFT JOIN role ON role.role_id=user_role.role_id
+        WHERE user.del_flag=0
+        AND user.status=0
+        ORDER BY create_time DESC
     </select>
 
     <select id="getOneUser" resultType="com.salary.entity.User" parameterType="String">
-        select user.*,role.role_id,role_key,role_name
-        from user,role,user_role
-        where user_role.user_id=user.user_id
-        and role.role_id=user_role.role_id
-        and login_name=#{login_name}
-        and user.del_flag=0
-        and user.status=0
+        SELECT user.*,dept_name,leader,role.role_id,role_key,role_name
+        FROM user
+        LEFT JOIN dept ON dept.dept_id=user.dept_id
+        LEFT JOIN user_role ON user_role.user_id=user.user_id
+        LEFT JOIN role ON role.role_id=user_role.role_id
+        WHERE login_name=#{login_name}
+        AND user.del_flag=0
+        AND user.status=0
     </select>
 
     <insert id="insertUser" parameterType="java.util.HashMap">
@@ -68,12 +71,30 @@
         )
     </insert>
 
-    <update id="updateUser" parameterType="java.util.HashMap">
+    <select id="searchUser" parameterType="java.util.List" resultType="map">
+        SELECT user.*,dept_name,leader,role.role_id,role_key,role_name
+        FROM user
+        LEFT JOIN dept ON dept.dept_id=user.dept_id
+        LEFT JOIN user_role ON user_role.user_id=user.user_id
+        LEFT JOIN role ON role.role_id=user_role.role_id
+        WHERE user.del_flag=0
+        AND user.status=0
+        <foreach collection="list" index="index" item="item">
+            <if test="item.searchType != null and item.searchType != ''
+             and item.searchContent != null and item.searchContent != ''">
+                and ${item.searchType} like CONCAT('%', #{item.searchContent},'%')
+            </if>
+        </foreach>
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="updatePerson" parameterType="java.util.HashMap">
         UPDATE user
         set real_name=#{real_name},
         user_name=#{user_name},
         phone_number=#{phone_number},
         sex=#{sex},
+        age=#{age},
         email=#{email},
         updater=#{updater},
         update_time=NOW()
@@ -82,7 +103,7 @@
         and status=0;
     </update>
 
-    <update id="updateUserPassword" parameterType="java.util.HashMap">
+    <update id="updatePersonPassword" parameterType="java.util.HashMap">
         UPDATE user
         set password=#{password},
         updater=#{updater},
@@ -90,6 +111,30 @@
         where user_id=#{user_id}
         and del_flag=0
         and status=0;
+    </update>
+
+    <update id="updateUser" parameterType="java.util.HashMap">
+        UPDATE user
+        set real_name=#{real_name},
+        user_name=#{user_name},
+        dept_id=#{dept_id},
+        phone_number=#{phone_number},
+        status=#{status},
+        sex=#{sex},
+        age=#{age},
+        email=#{email},
+        remark=#{remark},
+        updater=#{updater},
+        update_time=NOW()
+        where user_id=#{user_id}
+        and del_flag=0
+        and status=0;
+    </update>
+
+    <update id="updateUserRole" parameterType="java.util.HashMap">
+        update user_role
+		set role_id=#{role_id}
+		where user_id=#{user_id}
     </update>
 
     <select id="getUserPerms" resultType="java.util.HashMap" parameterType="String">

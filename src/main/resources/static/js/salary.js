@@ -119,7 +119,7 @@ var submitType={
                     });
                 });
 
-            }
+            },
         },
         // 弹出层封装处理
         modal: {
@@ -151,14 +151,12 @@ var submitType={
                         location.reload();
                 });
             },
-            // 消息提示,默认刷新子页面
+            // 消息提示
             msg : function(content, type, a) {
                 if( typeof a==='function'){
                     layer.msg(content, { icon: $.modal.icon(type), time: 1500, shift: 5 }, function () {
                         if( typeof a==='function'){
                             a();
-                        } else{
-                            location.reload();
                         }
                     });
                 }
@@ -202,6 +200,20 @@ var submitType={
                     $.unblockUI();
                 }, 50);
             },
+            //弹出一个编辑界面
+            open:function (options) {
+                layer.open({
+                    type: 2,
+                    title:options.title,
+                    area: options.area,
+                    btn:options.btn,
+                    maxmin: true,
+                    shadeClose: true,
+                    content: options.content,
+                    success: options.success,
+                    yes: options.yes,
+                });
+            }
         },
         // 操作封装处理
         operate: {
@@ -428,7 +440,15 @@ var submitType={
                 }
                 return second;
             },
+            //设置子页面的值
+             setFormValuate:function(body,id,value){
+                body.contents().find(id).val(value);
+            },
 
+            //获取子页面的值
+            getFormValue:function (body,id){
+                return body.contents().find(id);
+            }
         },
     })
 })(jQuery);
