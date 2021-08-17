@@ -78,7 +78,7 @@
     if(true){
         defaultToolbar.push({
             title: '批量删除',
-            layEvent: 'delete',
+            layEvent: 'combine_delete',
             icon: 'layui-icon-delete'
         });
     }
@@ -114,6 +114,7 @@
             {
                 field:'user_name',
                 title: '用户名称',
+                hide:true
             },
             {
                 field:'role_name',
@@ -196,7 +197,7 @@
                 case 'insert':
                     insertUser(form,table);
                     break;
-                case 'combine_del':
+                case 'combine_delete':
                     deleteCombineUser(table,checkStatus);
                     break;
                 case 'export':
@@ -224,7 +225,9 @@
 
         //监听用户状态事件
         form.on('switch(status)', function(obj){
-            changeUserStatus();
+            var user_id = obj.value;
+            var status = this.checked ? '0' : '1';
+            changeUserStatus(form,user_id,status);
         });
     });
 </script>

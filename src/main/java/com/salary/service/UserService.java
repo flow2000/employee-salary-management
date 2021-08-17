@@ -37,6 +37,8 @@ public interface UserService {
 
     AjaxResult resetUserPassword(Map<String, Object> map);
 
+    AjaxResult changeUserStatus(Map<String, Object> map);
+
     AjaxResult deleteUser(Map<String, Object> map);
 
 }

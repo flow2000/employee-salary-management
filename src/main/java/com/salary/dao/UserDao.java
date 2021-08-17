@@ -27,7 +27,9 @@ public interface UserDao {
 
     List<Map> searchUser(List<Map> queryList);
 
-    int deleteUser(Map<String, Object> map);
+    int changeUserStatus(Map<String, Object> map);
+
+    int deleteUser(String[] array);
 
     List<Menu> getUserPerms(BigInteger user_id);
 

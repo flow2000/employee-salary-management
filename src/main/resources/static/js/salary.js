@@ -62,7 +62,7 @@ var submitType={
             get : function (key) {
                 var val = localStorage.getItem(key);
                 if (!$.common.isExist(val)) {
-                    window.top.location='login';
+                    return null;
                 }
                 val = JSON.parse(val);
                 if(val.expire===-1){  //过期时间为-1直接返回
@@ -213,6 +213,13 @@ var submitType={
                     success: options.success,
                     yes: options.yes,
                 });
+            },
+            confirm:function (options) {
+                layer.confirm(options.content,{
+                    btn: ['确认','取消'],
+                    icon: 3,
+                    title:'提示'
+                }, options.callback)
             }
         },
         // 操作封装处理

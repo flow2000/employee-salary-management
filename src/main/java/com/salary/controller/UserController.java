@@ -181,6 +181,18 @@ public class UserController {
     }
 
     /**
+     * 修改用户状态
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改用户状态")
+    @ApiImplicitParam()
+    @PostMapping("/user/changeUserStatus")
+    public AjaxResult changeUserStatus(@RequestBody Map<String, Object> map){
+        return userService.changeUserStatus(map);
+    }
+
+    /**
      * 删除用户信息
      * @param map 用户信息
      * @return 成功或者失败消息

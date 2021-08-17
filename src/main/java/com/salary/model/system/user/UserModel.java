@@ -29,4 +29,9 @@ public class UserModel {
     public String reset(){
         return "system/user/reset";
     }
+
+    @GetMapping("/delete")
+    public String delete(){
+        return "system/user/delete";
+    }
 }

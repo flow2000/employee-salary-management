@@ -1,3 +1,13 @@
+/**
+ * date: 2021/08/18
+ * description: 用户管理js
+ * require:
+ * author: 庞海
+ * version: 1.0
+ *
+ */
+
+//搜索用户
 function searchUser(table) {
     if($('#login_name').val()===''&&$('#phone').val()===''&&$('#user_status').val()===''){
         table.reload('layui-table',{
@@ -28,6 +38,7 @@ function searchUser(table) {
     }
 }
 
+//添加用户
 function insertUser(form,table) {
     var body;
     var iframeWindow;
@@ -109,12 +120,110 @@ function insertUser(form,table) {
     $.modal.open(options);
 }
 
+//批量删除用户
 function deleteCombineUser(table,checkStatus) {
-
+    var data = checkStatus.data;
+    if (data.length>1){
+        var options={
+            content:'确定要删除吗？',
+            callback:function (index) {
+                var str_user_id="";
+                $.each(data,function (i,v) {
+                    str_user_id+=v.user_id+";";
+                });
+                var sendData = {
+                    "user_id": str_user_id,
+                    "updater": $.cache.get('user').user.user_id,
+                };
+                $.operate.jsonPost(crx+'/user/deleteUser',JSON.stringify(sendData),function (result) {
+                    if(result.code===0){
+                        $.modal.msgSuccess(result.msg,function () {
+                            layer.close(index);
+                            location.reload();
+                        })
+                    }else {
+                        $.modal.msgError(result.msg,function () {})
+                    }
+                });
+            }
+        };
+        $.modal.confirm(options);
+    }else{
+        $.modal.msgWarning('至少选择两条数据',function () {});
+    }
 }
 
+//导出用户数据
 function exportUserFile(excel){
+    $.operate.get(crx+'/user/getAllUser',exportExcel);
+    function exportExcel(result){
+        result.data.unshift({
+            login_name: '登录名称',
+            dept_name: '部门名称',
+            role_name: '角色名称',
+            user_name: '用户名称',
+            real_name: '姓名',
+            sex: '性别',
+            age: '年龄',
+            phone_number: '电话',
+            email: '邮箱',
+            status: '状态',
+            create_time: '创建时间',
+            remark: '备注',
+        });
+        var data = excel.filterExportData(result.data, {
+            login_name: 'login_name',
+            dept_name: 'dept_name',
+            role_name: 'role_name',
+            user_name: 'user_name',
+            real_name: 'real_name',
+            sex: function(value, line, data) {
+                if(line.sex !== '性别'){
+                    var sex;
+                    if(value==="0")
+                        sex='未知';
+                    else if(value==="1")
+                        sex='女';
+                    else
+                        sex='男';
+                    return {
+                        v: sex
+                    };
+                }
+                return {
+                    v: value
+                };
+            },
+            age: 'age',
+            phone_number: 'phone_number',
+            email: 'email',
+            status: function(value, line, data) {
+                if(line.status !== '状态'){
+                    return {
+                        v: value==="0"?'正常':'停用'
+                    };
+                }
+                return {
+                    v: value
+                };
+            },
+            create_time: function(value, line, data) {
+                if(line.create_time !== '创建时间'){
+                    return {
+                        v: value
+                    };
+                }
+                return {
+                    v: value
+                };
+            },
+            remark: 'remark'
+        });
+        excel.exportExcel({
+            sheet1: data
+        }, '用户数据.xlsx', 'xlsx');
 
+    }
 }
 
 //编辑用户
@@ -146,6 +255,9 @@ function updateUser(form,data){
             if(data.dept_id===''){
                 data.dept_id=null;
             }
+            if(data.age===''){
+                data.age=null;
+            }
             $.operate.jsonPost(crx+'/user/updateUser',JSON.stringify(data),function (result) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
@@ -175,7 +287,6 @@ function updateUser(form,data){
                 body.contents().find("#role_id").find("option[value="+v.role_id+"]").prop("selected",true);
             }
         });
-        rederSelect();
         $.common.setFormValuate(body,"#user_id",data.user_id);
         $.common.setFormValuate(body,"#login_name",data.login_name);
         $.common.setFormValuate(body,"#dept_id",data.dept_id);
@@ -231,19 +342,44 @@ function resetPassword(data,table) {
     $.modal.open(options);
 }
 
+//删除用户
 function deleteUser(data,table) {
-    layer.confirm('确认删除用户吗？', {
-        btn: ['确认','取消'],
-        icon: 3,
-        title:'提示'
-    }, function(index){
-        var sendData={
-          "user_id":data.user_id,
-        };
-        layer.close(index);
-    })
+    var options={
+      content:'确定要删除吗？',
+        callback:function (index) {
+            var user_id = data.user_id;
+            var sendData = {
+                "user_id": user_id+"",
+                "updater": $.cache.get('user').user.user_id,
+            };
+            $.operate.jsonPost(crx+'/user/deleteUser',JSON.stringify(sendData),function (result) {
+                if(result.code===0){
+                    $.modal.msgSuccess(result.msg,function () {
+                        layer.close(index);
+                        location.reload();
+                    })
+                }else {
+                    $.modal.msgError(result.msg,function () {})
+                }
+            });
+        }
+    };
+    $.modal.confirm(options);
 }
 
-function changeUserStatus() {
-
+//修改用户状态
+function changeUserStatus(form,user_id,status) {
+    var sendData = {
+        "user_id": user_id+"",
+        "status": status,
+        "updater":$.cache.get('user').user.user_id,
+    };
+    $.operate.jsonPost(crx+'/user/changeUserStatus',JSON.stringify(sendData),function (result) {
+        if(result.code===0){
+            $.modal.msgSuccess(result.msg,function () {})
+        }else {
+            $.modal.msgError(result.msg,function () {})
+        }
+    });
+    form.render();//渲染开关
 }

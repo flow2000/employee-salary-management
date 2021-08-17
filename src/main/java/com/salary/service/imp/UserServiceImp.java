@@ -275,7 +275,12 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public AjaxResult deleteUser(Map<String, Object> map) {
-        return AjaxResult.toAjax(userDao.deleteUser(map));
+        String user_id = (String) map.get("user_id");
+        if(user_id!=null){
+            String[] array = user_id.split(";");
+            return AjaxResult.toAjax(userDao.deleteUser(array));
+        }
+        return AjaxResult.error("删除失败");
     }
 
     /**
@@ -302,6 +307,16 @@ public class UserServiceImp implements UserService {
         String password = dp.getDigestString(map.get(PASSWORD)+user.getSalt()); //盐加密
         map.put(PASSWORD,password);
         return AjaxResult.toAjax(userDao.resetUserPassword(map));
+    }
+
+    /**
+     * 修改用户状态
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult changeUserStatus(Map<String, Object> map) {
+        return AjaxResult.toAjax(userDao.changeUserStatus(map));
     }
 
     /**
