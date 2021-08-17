@@ -33,8 +33,10 @@ public interface UserService {
 
     AjaxResult verifyPersonPassword(Map<String, Object> map);
 
-    AjaxResult deleteUser(Map<String, Object> map);
-
     AjaxResult updateUser(Map<String, Object> map);
+
+    AjaxResult resetUserPassword(Map<String, Object> map);
+
+    AjaxResult deleteUser(Map<String, Object> map);
 
 }

@@ -175,7 +175,9 @@ public class UserServiceImp implements UserService {
     @Override
     public AjaxResult getOneUser(String login_name) {
         User user = userDao.getOneUser(login_name);
-        user.setPassword("*******");
+        if(user!=null) {
+            user.setPassword("*******");
+        }
         return AjaxResult.returnMessage(user);
     }
 
@@ -231,7 +233,21 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public AjaxResult insertUser(Map<String, Object> map) {
-        return AjaxResult.toAjax(userDao.insertUser(map));
+        String login_name= (String) map.get("login_name");
+        if(userDao.getOneUser(login_name)!=null){
+            return AjaxResult.error("用户已存在");
+        }
+        String salt = StringUtils.getSalt();
+        map.put("salt",salt);
+        DigestPass dp=new DigestPass();  //MD5摘要算法
+        String password = dp.getDigestString(map.get(PASSWORD)+salt); //盐加密
+        map.put(PASSWORD,password);
+        if(userDao.insertUser(map)==0){
+            return AjaxResult.error("添加失败");
+        }
+        User user = userDao.getOneUser(login_name);
+        map.put("user_id",user.getUser_id());
+        return AjaxResult.toAjax(userDao.insertUserRole(map));
     }
 
     /**
@@ -275,7 +291,21 @@ public class UserServiceImp implements UserService {
     }
 
     /**
-     * 将用户密码重置
+     * 重置用户密码
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult resetUserPassword(Map<String, Object> map) {
+        User user = userDao.getOneUser((String)map.get("login_name")); //数据库查找用户
+        DigestPass dp=new DigestPass();  //MD5摘要算法
+        String password = dp.getDigestString(map.get(PASSWORD)+user.getSalt()); //盐加密
+        map.put(PASSWORD,password);
+        return AjaxResult.toAjax(userDao.resetUserPassword(map));
+    }
+
+    /**
+     * 将获得的用户数据中的用户密码重置
      * @param userList 用户数组
      */
     void resetUserPassword(List<Map> userList){

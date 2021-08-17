@@ -35,4 +35,7 @@ public interface UserDao {
 
     int updateUserRole(Map<String, Object> map);
 
+    int insertUserRole(Map<String, Object> map);
+
+    int resetUserPassword(Map<String, Object> map);
 }

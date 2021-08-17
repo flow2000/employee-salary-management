@@ -8,6 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
@@ -35,7 +36,14 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         //权限认证，后面再写
 
-        response.sendRedirect("/salary/login"); //回到登录界面
+        //回到登录界面
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<script>");
+        out.println("window.open ('"+request.getContextPath()+"/login','_top')");
+        out.println("</script>");
+        out.println("</html>");
+
         return false;
     }
 }

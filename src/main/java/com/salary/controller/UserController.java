@@ -168,6 +168,17 @@ public class UserController {
         return userService.updateUser(map);
     }
 
+    /**
+     * 重置用户密码
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "重置用户密码")
+    @ApiImplicitParam()
+    @PostMapping("/user/resetUserPassword")
+    public AjaxResult resetUserPassword(@RequestBody Map<String, Object> map){
+        return userService.resetUserPassword(map);
+    }
 
     /**
      * 删除用户信息

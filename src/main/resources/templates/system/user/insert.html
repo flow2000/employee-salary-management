@@ -3,8 +3,107 @@
 <head th:replace="header :: header('用户添加')"></head>
 <body>
 <div th:replace="header :: footer"></div>
-<h1>
-    insert
-</h1>
+<!-- 添加用户信息 -->
+<form class="layui-form layuimini-form"  id="insertUser">
+    <input type="text" id="user_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label required" >登录名：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="login_name" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required" >密码：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="password" id="password" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" >用户名：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="user_name" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" >姓名：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="real_name" value="" class="form-control" />
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">部门：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="dept_id" >
+                <option value="">未知</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label required">角色：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="role_id" >
+                <option value="">未知</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">手机：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="phone_number" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">邮箱：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="email" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="sex" >
+                <option value="0">未知</option>
+                <option value="2">男</option>
+                <option value="1">女</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="age" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name = "status" lay-skin="switch" lay-filter="status" checked>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="remark" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+    var login_name=$("#login_name");
+    login_name.blur(function() {
+        if(login_name.val()!==''){
+            $.operate.get(crx+'/user/getOneUser?login_name='+login_name.val(),function(result){
+                    if(result.code===0){
+                        login_name.val("");
+                        $.modal.msgError("用户已存在",function () {});
+                    }
+                }
+            );
+        }
+    })
+</script>
 </body>
 </html>

@@ -24,4 +24,9 @@ public class UserModel {
     public String update(){
         return "system/user/update";
     }
+
+    @GetMapping("/reset")
+    public String reset(){
+        return "system/user/reset";
+    }
 }

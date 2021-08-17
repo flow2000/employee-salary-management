@@ -35,8 +35,6 @@ public class User {
     private String age;         //年龄
     private String email;       //邮箱
     private String phone_number;//手机号
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date entry_time;    //入职时间
     private String status;      //用户状态
     private String del_flag;    //删除标志
     private String creater;     //创建者

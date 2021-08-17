@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="header :: header('用户修改')"></head>
+<body>
+<div th:replace="header :: footer"></div>
+<!-- 重置密码 -->
+<form class="layui-form layuimini-form"  id="resetPassword" style="margin-top: 5%">
+    <input type="text" id="user_id" style="display: none;">
+    <div class="layui-form-item">
+        <label class="layui-form-label" >密码：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="password" value="" class="form-control"/>
+        </div>
+    </div>
+</form>
+</body>
+</html>

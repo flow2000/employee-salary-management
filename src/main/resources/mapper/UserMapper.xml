@@ -9,7 +9,6 @@
         LEFT JOIN user_role ON user_role.user_id=user.user_id
         LEFT JOIN role ON role.role_id=user_role.role_id
         WHERE user.del_flag=0
-        AND user.status=0
         ORDER BY create_time DESC
     </select>
 
@@ -20,7 +19,6 @@
         LEFT JOIN user_role ON user_role.user_id=user.user_id
         LEFT JOIN role ON role.role_id=user_role.role_id
         WHERE user.del_flag=0
-        AND user.status=0
         ORDER BY create_time DESC
     </select>
 
@@ -32,7 +30,6 @@
         LEFT JOIN role ON role.role_id=user_role.role_id
         WHERE login_name=#{login_name}
         AND user.del_flag=0
-        AND user.status=0
     </select>
 
     <insert id="insertUser" parameterType="java.util.HashMap">
@@ -46,7 +43,6 @@
             sex,
             email,
             phone_number,
-            entry_time,
             status,
             del_flag,
             creater,
@@ -62,11 +58,10 @@
             #{sex},
             #{email},
             #{phone_number},
-            #{entry_time},
             #{status},
-            #{del_flag},
+            0,
             #{creater},
-            #{create_time},
+            NOW(),
             #{remark}
         )
     </insert>
@@ -78,7 +73,6 @@
         LEFT JOIN user_role ON user_role.user_id=user.user_id
         LEFT JOIN role ON role.role_id=user_role.role_id
         WHERE user.del_flag=0
-        AND user.status=0
         <foreach collection="list" index="index" item="item">
             <if test="item.searchType != null and item.searchType != ''
              and item.searchContent != null and item.searchContent != ''">
@@ -100,7 +94,6 @@
         update_time=NOW()
         where user_id=#{user_id}
         and del_flag=0
-        and status=0;
     </update>
 
     <update id="updatePersonPassword" parameterType="java.util.HashMap">
@@ -110,7 +103,6 @@
         update_time=NOW()
         where user_id=#{user_id}
         and del_flag=0
-        and status=0;
     </update>
 
     <update id="updateUser" parameterType="java.util.HashMap">
@@ -128,7 +120,6 @@
         update_time=NOW()
         where user_id=#{user_id}
         and del_flag=0
-        and status=0;
     </update>
 
     <update id="updateUserRole" parameterType="java.util.HashMap">
@@ -137,11 +128,29 @@
 		where user_id=#{user_id}
     </update>
 
+    <insert id="insertUserRole" parameterType="java.util.HashMap">
+        INSERT user_role(
+            user_id,
+            role_id
+        )value(
+            #{user_id},
+            #{role_id}
+        )
+    </insert>
+
     <select id="getUserPerms" resultType="java.util.HashMap" parameterType="String">
         SELECT menu.* FROM user,menu,role_menu,user_role
         where user.user_id=user_role.user_id
         and user_role.role_id=role_menu.role_id
         and role_menu.menu_id=menu.menu_id
     </select>
+
+    <update id="resetUserPassword" parameterType="java.util.HashMap">
+        UPDATE user
+        SET password=#{password},
+        updater=#{updater},
+        update_time=NOW()
+        WHERE user_id=#{user_id}
+    </update>
 
 </mapper>

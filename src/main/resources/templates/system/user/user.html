@@ -124,6 +124,25 @@
                 title: '部门',
             },
             {
+                field:'sex',
+                title: '性别',
+                templet:function(d){
+                    var sex = d.sex;
+                    if(sex==='0')
+                        return '未知';
+                    else if(sex==='1')
+                        return '女';
+                    else if(sex==='2')
+                        return '男';
+                },
+                hide:true
+            },
+            {
+                field:'age',
+                title: '年龄',
+                hide:true
+            },
+            {
                 field:'email',
                 title: '邮箱',
                 hide:true

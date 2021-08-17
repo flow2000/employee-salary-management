@@ -62,7 +62,7 @@ var submitType={
             get : function (key) {
                 var val = localStorage.getItem(key);
                 if (!$.common.isExist(val)) {
-                    return null;
+                    window.top.location='login';
                 }
                 val = JSON.parse(val);
                 if(val.expire===-1){  //过期时间为-1直接返回
