@@ -278,6 +278,8 @@ public class UserServiceImp implements UserService {
         String user_id = (String) map.get("user_id");
         if(user_id!=null){
             String[] array = user_id.split(";");
+            //删除用户与角色关联
+            userDao.deleteUserRole(array);
             return AjaxResult.toAjax(userDao.deleteUser(array));
         }
         return AjaxResult.error("删除失败");
@@ -291,8 +293,20 @@ public class UserServiceImp implements UserService {
      */
     @Override
     public AjaxResult updateUser(Map<String, Object> map) {
-        userDao.updateUserRole(map);
-        return AjaxResult.toAjax(userDao.updateUser(map));
+        String user_id = (String) map.get("user_id");
+        String role_id = (String) map.get("role_id");
+        //删除用户角色关联
+        if(!StringUtils.isEmpty(user_id)){
+            String[] array = user_id.split(";");
+            //删除用户与角色关联
+            userDao.deleteUserRole(array);
+            if(!StringUtils.isEmpty(role_id)){
+                //添加用户角色关联
+                userDao.insertUserRole(map);
+            }
+            return AjaxResult.toAjax(userDao.updateUser(map));
+        }
+        return AjaxResult.error("删除失败");
     }
 
     /**

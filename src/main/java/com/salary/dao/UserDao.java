@@ -33,9 +33,9 @@ public interface UserDao {
 
     List<Menu> getUserPerms(BigInteger user_id);
 
-    int updateUser(Map<String, Object> map);
+    int deleteUserRole(String[] array);
 
-    int updateUserRole(Map<String, Object> map);
+    int updateUser(Map<String, Object> map);
 
     int insertUserRole(Map<String, Object> map);
 
