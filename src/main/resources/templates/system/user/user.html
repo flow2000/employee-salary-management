@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <button type="button" class="layui-btn layui-btn-primary " id="search" lay-event="search" >
+                    <button type="button" class="layui-btn layui-btn-primary " id="searchUser" lay-event="searchUser" >
                     <i class="layui-icon"></i>
                 </button>
                 </div>
@@ -44,10 +44,10 @@
         <!--侧边栏-->
         <script type="text/html" id="sideToolBar">
             {{#  if(d.user_id!=1){ }}
-                <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="update"></a>
-                <a class="layui-btn layui-btn-xs layui-icon-refresh layui-icon" lay-event="reset"></a>
+                <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateUser"></a>
+                <a class="layui-btn layui-btn-xs layui-icon-refresh layui-icon" lay-event="resetPassword"></a>
                 <a class="layui-btn layui-btn-xs layui-btn-danger layui-icon-delete layui-icon"
-                   lay-event="delete"></a>
+                   lay-event="deleteUser"></a>
             {{#  } }}
         </script>
 
@@ -71,21 +71,21 @@
     if(true){
         defaultToolbar.push({
             title: '添加用户',
-            layEvent: 'insert',
+            layEvent: 'insertUser',
             icon: 'layui-icon-add-1'
         });
     }
     if(true){
         defaultToolbar.push({
             title: '批量删除',
-            layEvent: 'combine_delete',
+            layEvent: 'deleteCombineUser',
             icon: 'layui-icon-delete'
         });
     }
     if(true){
         defaultToolbar.push({
             title: '导出数据',
-            layEvent: 'export',
+            layEvent: 'exportUserFile',
             icon: 'layui-icon-export'
         });
     }
@@ -191,16 +191,16 @@
         table.on(('toolbar(layui-table)'), function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
-                case 'search':
+                case 'searchUser':
                     searchUser(table);
                     break;
-                case 'insert':
+                case 'insertUser':
                     insertUser(form,table);
                     break;
-                case 'combine_delete':
+                case 'deleteCombineUser':
                     deleteCombineUser(table,checkStatus);
                     break;
-                case 'export':
+                case 'exportUserFile':
                     exportUserFile(excel);
                     break;
             }
@@ -210,13 +210,13 @@
         table.on(('tool(layui-table)'), function (obj) {
             const data = obj.data;
             switch (obj.event) {
-                case 'update':
+                case 'updateUser':
                     updateUser(form,data);
                     break;
-                case 'reset':
+                case 'resetPassword':
                     resetPassword(data,table);
                     break;
-                case 'delete':
+                case 'deleteUser':
                     deleteUser(data,table);
                     break;
             }
