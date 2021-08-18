@@ -305,10 +305,14 @@ function changeRoleStatus(form,role_id,status) {
     };
     $.operate.jsonPost(crx+'/role/changeRoleStatus',JSON.stringify(sendData),function (result) {
         if(result.code===0){
-            $.modal.msgSuccess(result.msg,function () {})
+            $.modal.msgSuccess(result.msg,function () {
+                form.render();//渲染开关
+            })
         }else {
-            $.modal.msgError(result.msg,function () {})
+            $.modal.msgError(result.msg,function () {
+                location.reload();
+            })
         }
     });
-    form.render();//渲染开关
+
 }

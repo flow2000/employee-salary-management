@@ -101,12 +101,15 @@ public class RoleServiceImp implements RoleService {
     }
 
     /**
-     * 修改用户状态
-     * @param map 用户信息
+     * 修改角色状态
+     * @param map 角色信息
      * @return 成功或者失败消息
      */
     @Override
     public AjaxResult changeRoleStatus(Map<String, Object> map) {
+        if(hasUserRole(map)){
+            return AjaxResult.error("尚有用户使用该角色,不可修改");
+        }
         return AjaxResult.toAjax(roleDao.changeRoleStatus(map));
     }
 
@@ -118,12 +121,35 @@ public class RoleServiceImp implements RoleService {
      */
     @Override
     public AjaxResult deleteRole(Map<String, Object> map) {
+        if(hasUserRole(map)){
+            return AjaxResult.error("尚有用户使用该角色,不可删除");
+        }
         String role_id = (String) map.get("role_id");
         if(role_id!=null){
             String[] array = role_id.split(";");
             return AjaxResult.toAjax(roleDao.deleteRole(array));
         }
         return AjaxResult.error("删除失败");
+    }
+
+    /**
+     * 判断是否还有用户使用该角色
+     * @param map
+     * @return
+     */
+    private boolean hasUserRole(Map<String, Object> map){
+        String status = (String) map.get("status");
+        if(!"0".equals(status)){
+            String role_id = (String) map.get("role_id");
+            if(role_id!=null){
+                String[] array = role_id.split(";");
+                List<Map> list = roleDao.getUserRole(array);
+                if(list!=null&&list.size()>0){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

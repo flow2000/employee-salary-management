@@ -22,6 +22,8 @@ public interface RoleDao {
 
     int updateRole(Map<String, Object> map);
 
+    List<Map> getUserRole(String[] array);
+
     int changeRoleStatus(Map<String, Object> map);
 
     int deleteRole(String[] array);
