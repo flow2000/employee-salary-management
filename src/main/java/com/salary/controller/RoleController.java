@@ -54,7 +54,21 @@ public class RoleController {
         return roleService.getOneRole(role_key);
     }
 
-
+    /**
+     * 搜索角色
+     * @param page 页码
+     * @param limit 数量
+     * @param searchKey 字段
+     * @param searchValue 字段值
+     * @return 查询结果
+     */
+    @ApiOperation(value = "搜索角色")
+    @ApiImplicitParam
+    @GetMapping("/searchRole")
+    public AjaxResult searchRole(@RequestParam int page,@RequestParam int limit,
+                                 @RequestParam String searchKey,@RequestParam String searchValue){
+        return  roleService.searchRole(page,limit,searchKey,searchValue);
+    }
 
     /**
      * 添加角色信息
@@ -82,13 +96,25 @@ public class RoleController {
     }
 
     /**
+     * 修改角色状态
+     * @param map 角色信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改角色状态")
+    @ApiImplicitParam()
+    @PostMapping("/changeRoleStatus")
+    public AjaxResult changeRoleStatus(@RequestBody Map<String, Object> map){
+        return roleService.changeRoleStatus(map);
+    }
+
+    /**
      * 删除角色信息
      * @param map 角色信息
      * @return 成功或者失败消息
      */
     @ApiOperation(value = "删除角色信息")
     @ApiImplicitParam()
-    @GetMapping("/deleteRole")
+    @PostMapping("/deleteRole")
     public AjaxResult deleteRole(@RequestBody Map<String, Object> map){
         return roleService.deleteRole(map);
     }

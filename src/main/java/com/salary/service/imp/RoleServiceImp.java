@@ -5,9 +5,16 @@ import com.github.pagehelper.PageInfo;
 import com.salary.dao.RoleDao;
 import com.salary.service.RoleService;
 import com.salary.util.AjaxResult;
+import com.salary.util.StringUtils;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -54,6 +61,21 @@ public class RoleServiceImp implements RoleService {
         return AjaxResult.returnMessage(roleDao.getOneRole(role_key));
     }
 
+    /**
+     * 搜索角色
+     * @param page 页码
+     * @param limit 数量
+     * @param searchKey 字段
+     * @param searchValue 字段值
+     * @return 查询结果
+     */
+    @Override
+    public AjaxResult searchRole(int page, int limit, String searchKey, String searchValue) {
+        PageHelper.startPage(page, limit); //开始分页
+        List<Map> queryList = StringUtils.strToMapList(searchKey,searchValue);
+        List<Map> roleList = roleDao.searchRole(queryList); //拼接sql语句
+        return AjaxResult.returnMessage(new PageInfo<>(roleList)); //将分页结果放入pageUserList
+    }
 
 
     /**
@@ -79,6 +101,16 @@ public class RoleServiceImp implements RoleService {
     }
 
     /**
+     * 修改用户状态
+     * @param map 用户信息
+     * @return 成功或者失败消息
+     */
+    @Override
+    public AjaxResult changeRoleStatus(Map<String, Object> map) {
+        return AjaxResult.toAjax(roleDao.changeRoleStatus(map));
+    }
+
+    /**
      * 删除角色信息
      * @param map 角色信息
      *
@@ -86,7 +118,12 @@ public class RoleServiceImp implements RoleService {
      */
     @Override
     public AjaxResult deleteRole(Map<String, Object> map) {
-        return AjaxResult.toAjax(roleDao.deleteRole(map));
+        String role_id = (String) map.get("role_id");
+        if(role_id!=null){
+            String[] array = role_id.split(";");
+            return AjaxResult.toAjax(roleDao.deleteRole(array));
+        }
+        return AjaxResult.error("删除失败");
     }
 
 }

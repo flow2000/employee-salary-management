@@ -16,9 +16,13 @@ public interface RoleDao {
 
     List<Map> getOneRole(String role_key);
 
+    List<Map> searchRole(List<Map> queryList);
+
     int insertRole(Map<String, Object> map);
 
     int updateRole(Map<String, Object> map);
 
-    int deleteRole(Map<String, Object> map);
+    int changeRoleStatus(Map<String, Object> map);
+
+    int deleteRole(String[] array);
 }
