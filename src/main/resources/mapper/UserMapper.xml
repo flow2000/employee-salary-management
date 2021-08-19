@@ -92,7 +92,7 @@
 
     <update id="deleteUser">
         update user
-        set del_flag=1,
+        set del_flag=2,
         update_time=NOW()
         where user_id in
         <foreach collection="array" item="id" open="(" separator="," close=")">

@@ -102,7 +102,7 @@
 
     <update id="deleteRole">
         update role
-        set del_flag=1,
+        set del_flag=2,
         update_time=NOW()
         where role_id in
         <foreach collection="array" item="id" open="(" separator="," close=")">
