@@ -190,7 +190,6 @@
         //监听侧边工具栏事件
         table.on(('tool(layui-table)'), function (obj) {
             const data = obj.data;
-            console.log(data)
             switch (obj.event) {
                 case 'updateDept':
                     updateDept(form,data);

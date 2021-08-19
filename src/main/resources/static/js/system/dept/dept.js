@@ -83,6 +83,7 @@ function insertDept(form,table) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -116,6 +117,7 @@ function deleteCombineDept(table,checkStatus) {
                     if(result.code===0){
                         $.modal.msgSuccess(result.msg,function () {
                             layer.close(index);
+                            refresh();
                             location.reload();
                         })
                     }else {
@@ -167,6 +169,7 @@ function mergeDept(table,checkStatus) {
                     if(result.code===0){
                         $.modal.msgSuccess(result.msg,function () {
                             layer.close(index);
+                            refresh();
                             location.reload();
                         })
                     }else {
@@ -260,6 +263,7 @@ function updateDept(form,data){
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -296,6 +300,7 @@ function deleteDept(data,table) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -317,6 +322,7 @@ function changeDeptStatus(form,dept_id,status) {
     $.operate.jsonPost(crx+'/dept/changeDeptStatus',JSON.stringify(sendData),function (result) {
         if(result.code===0){
             $.modal.msgSuccess(result.msg,function () {})
+            refresh();
         }else {
             $.modal.msgError(result.msg,function () {
                 location.reload();
@@ -324,4 +330,13 @@ function changeDeptStatus(form,dept_id,status) {
         }
     });
     form.render();//渲染开关
+}
+
+//刷新部门缓存
+function refresh() {
+    $.operate.get(crx+'/dept/getAllDept',function (result) {
+        if (result.code===0){
+            $.cache.set("depts",result.data, -1);
+        }
+    })
 }

@@ -110,10 +110,14 @@ function insertUser(form,table) {
     //赋值
     function valuation(iframeWindow){
         $.each($.cache.get('depts'),function(i,v){
-            body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
+            if(v.status==="0"){
+                body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
+            }
         });
         $.each($.cache.get('roles'),function(i,v){
-            body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
+            if(v.status==="0"&&v.role_id!==1){
+                body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
+            }
         });
         iframeWindow.layui.form.render();
     }
@@ -276,13 +280,17 @@ function updateUser(form,data){
     //赋值
     function valuation(iframeWindow){
         $.each($.cache.get('depts'),function(i,v){
-            body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
+            if(v.status==="0"){
+                body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
+            }
             if(v.dept_id===data.dept_id){
                 body.contents().find("#dept_id").find("option[value="+v.dept_id+"]").prop("selected",true);
             }
         });
         $.each($.cache.get('roles'),function(i,v){
-            body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
+            if(v.status==="0"&&v.role_id!==1){
+                body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
+            }
             if(v.role_id===data.role_id){
                 body.contents().find("#role_id").find("option[value="+v.role_id+"]").prop("selected",true);
             }

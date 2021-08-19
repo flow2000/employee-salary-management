@@ -129,7 +129,6 @@
         user_name=#{user_name},
         dept_id=#{dept_id},
         phone_number=#{phone_number},
-        status=#{status},
         sex=#{sex},
         age=#{age},
         email=#{email},

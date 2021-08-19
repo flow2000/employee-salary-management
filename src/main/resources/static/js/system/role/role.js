@@ -69,6 +69,7 @@ function insertRole(form,table) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -102,6 +103,7 @@ function deleteCombineRole(table,checkStatus) {
                     if(result.code===0){
                         $.modal.msgSuccess(result.msg,function () {
                             layer.close(index);
+                            refresh();
                             location.reload();
                         })
                     }else {
@@ -191,6 +193,7 @@ function updateRole(form,data){
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -227,6 +230,7 @@ function deleteRole(data,table) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
+                        refresh();
                         location.reload();
                     })
                 }else {
@@ -248,6 +252,7 @@ function changeRoleStatus(form,role_id,status) {
     $.operate.jsonPost(crx+'/role/changeRoleStatus',JSON.stringify(sendData),function (result) {
         if(result.code===0){
             $.modal.msgSuccess(result.msg,function () {
+                refresh();
                 form.render();//渲染开关
             })
         }else {
@@ -257,4 +262,13 @@ function changeRoleStatus(form,role_id,status) {
         }
     });
 
+}
+
+//刷新角色缓存
+function refresh() {
+    $.operate.get(crx+'/role/getAllRole',function (result) {
+        if (result.code===0){
+            $.cache.set("roles",result.data, -1);
+        }
+    })
 }
