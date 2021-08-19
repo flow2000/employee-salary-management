@@ -1,5 +1,6 @@
 package com.salary.dao;
 
+import com.salary.entity.Dept;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -14,12 +15,19 @@ public interface DeptDao {
 
     List<Map> getPageDept(Integer page, Integer limit);
 
-    List<Map> getOneDept(String dept_name);
+    Dept getOneDept(String dept_name);
+
+    List<Map> searchDept(List<Map> queryList);
 
     int insertDept(Map<String, Object> map);
 
     int updateDept(Map<String, Object> map);
 
-    int deleteDept(Map<String, Object> map);
-    
+    int changeDeptStatus(Map<String, Object> map);
+
+    int deleteDept(String[] array);
+
+    List<Dept> getUserDept(String[] array);
+
+    int updateUserDept(Map<String, Object> map);
 }

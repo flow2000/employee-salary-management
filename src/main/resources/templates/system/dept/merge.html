@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
-<head >
-    <th:block th:include="header :: header('添加部门')"/>
+<head>
+    <th:block th:include="header :: header('部门合并')"/>
 </head>
 <body>
 <th:block th:include="header :: footer"/>
-<!-- 添加部门信息 -->
-<form class="layui-form layuimini-form"  id="insertRole">
+<!-- 合并后部门信息 -->
+<form class="layui-form layuimini-form"  id="mergeDept">
     <input type="text" id="role_id" style="display: none">
     <div class="layui-form-item">
         <label class="layui-form-label required" >部门名称：</label>

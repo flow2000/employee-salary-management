@@ -12,13 +12,28 @@
         where del_flag=0
     </select>
 
-    <select id="getOneDept" resultType="java.util.HashMap" parameterType="String">
+    <select id="getOneDept" resultType="com.salary.entity.Dept" parameterType="String">
         select* from dept
         where dept_name=#{dept_name}
+        and del_flag=0
     </select>
 
-    <insert id="insertDept" parameterType="java.util.HashMap">
+    <select id="searchDept" parameterType="java.util.List" resultType="java.util.HashMap">
+        SELECT dept.*
+        FROM dept
+        WHERE dept.del_flag=0
+        <foreach collection="list" index="index" item="item">
+            <if test="item.searchType != null and item.searchType != ''
+             and item.searchContent != null and item.searchContent != ''">
+                and ${item.searchType} like CONCAT('%', #{item.searchContent},'%')
+            </if>
+        </foreach>
+        ORDER BY dept_id ASC
+    </select>
+
+    <insert id="insertDept" parameterType="java.util.HashMap" keyProperty="dept_id" useGeneratedKeys="true">
         insert dept(
+            dept_id,
             dept_name,
             leader,
             phone,
@@ -26,18 +41,65 @@
             status,
             del_flag,
             creater,
-            create_time,
-            remark
-            ) value(
+            create_time
+        ) value(
+            0,
             #{dept_name},
             #{leader},
             #{phone},
             #{email},
             #{status},
-            #{del_flag},
+            0,
             #{creater},
-            #{create_time},
-            #{remark}
+            NOW()
         )
     </insert>
+
+    <update id="updateDept" parameterType="java.util.HashMap" >
+        update dept
+        set dept_name=#{dept_name},
+        leader=#{leader},
+        phone=#{phone},
+        email=#{email},
+        updater=#{updater},
+        update_time=NOW()
+        where dept_id=#{dept_id}
+    </update>
+
+    <update id="changeDeptStatus" parameterType="java.util.HashMap">
+        update dept
+        set status=#{status},
+        updater=#{updater},
+        update_time=NOW()
+        where dept_id=#{dept_id}
+    </update>
+
+    <update id="deleteDept" >
+        update dept
+        set del_flag=2,
+        update_time=NOW()
+        where dept_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getUserDept" resultType="com.salary.entity.Dept">
+        select * from user
+        where del_flag=0
+        and dept_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <update id="updateUserDept" parameterType="java.util.HashMap">
+        update user
+        set dept_id=#{dept_id}
+        where dept_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

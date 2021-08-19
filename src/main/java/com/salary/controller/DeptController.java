@@ -54,7 +54,21 @@ public class DeptController {
         return deptService.getOneDept(dept_name);
     }
 
-
+    /**
+     * 搜索部门
+     * @param page 页码
+     * @param limit 数量
+     * @param searchKey 字段
+     * @param searchValue 字段值
+     * @return 查询结果
+     */
+    @ApiOperation(value = "搜索部门")
+    @ApiImplicitParam
+    @GetMapping("/searchDept")
+    public AjaxResult searchDept(@RequestParam int page,@RequestParam int limit,
+                                 @RequestParam String searchKey,@RequestParam String searchValue){
+        return  deptService.searchDept(page,limit,searchKey,searchValue);
+    }
 
     /**
      * 添加部门信息
@@ -63,7 +77,7 @@ public class DeptController {
      */
     @ApiOperation(value = "获取单个部门信息")
     @ApiImplicitParam()
-    @GetMapping("/insertDept")
+    @PostMapping("/insertDept")
     public AjaxResult insertDept(@RequestBody Map<String, Object> map){
         return deptService.insertDept(map);
     }
@@ -76,9 +90,21 @@ public class DeptController {
      */
     @ApiOperation(value = "修改部门信息")
     @ApiImplicitParam()
-    @GetMapping("/updateDept")
+    @PostMapping("/updateDept")
     public AjaxResult updateDept(@RequestBody Map<String, Object> map){
         return deptService.updateDept(map);
+    }
+
+    /**
+     * 修改部门状态
+     * @param map 部门信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "修改部门状态")
+    @ApiImplicitParam()
+    @PostMapping("/changeDeptStatus")
+    public AjaxResult changeDeptStatus(@RequestBody Map<String, Object> map){
+        return deptService.changeDeptStatus(map);
     }
 
     /**
@@ -88,8 +114,21 @@ public class DeptController {
      */
     @ApiOperation(value = "删除部门信息")
     @ApiImplicitParam()
-    @GetMapping("/deleteDept")
+    @PostMapping("/deleteDept")
     public AjaxResult deleteDept(@RequestBody Map<String, Object> map){
         return deptService.deleteDept(map);
     }
+
+    /**
+     * 合并部门信息
+     * @param map 部门信息
+     * @return 成功或者失败消息
+     */
+    @ApiOperation(value = "合并部门信息")
+    @ApiImplicitParam()
+    @PostMapping("/mergeDept")
+    public AjaxResult mergeDept(@RequestBody Map<String, Object> map){
+        return deptService.mergeDept(map);
+    }
+
 }

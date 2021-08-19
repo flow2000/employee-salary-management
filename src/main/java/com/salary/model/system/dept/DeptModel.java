@@ -24,4 +24,9 @@ public class DeptModel {
     public String update(){
         return "system/dept/update";
     }
+
+    @GetMapping("/merge")
+    public String merge(){
+        return "system/dept/merge";
+    }
 }

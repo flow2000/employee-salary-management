@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
-<head th:replace="header :: header('部门修改')"></head>
+<<head >
+    <th:block th:include="header :: header('部门修改')"/>
+</head>
 <body>
-
-<div th:replace="header :: footer"></div>
-update
+<th:block th:include="header :: footer"/>
+<!-- 修改部门信息 -->
+<form class="layui-form layuimini-form"  id="insertRole">
+    <input type="text" id="role_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label required" >部门名称：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="dept_name" value="" class="form-control"/>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label required">负责人：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="leader" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label required">联系电话：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="phone" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">邮箱：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="email" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+</script>
 </body>
 </html>
