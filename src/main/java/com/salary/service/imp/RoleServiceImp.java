@@ -80,7 +80,7 @@ public class RoleServiceImp implements RoleService {
         PageHelper.startPage(page, limit); //开始分页
         List<Map> queryList = StringUtils.strToMapList(searchKey,searchValue);
         List<Map> roleList = roleDao.searchRole(queryList); //拼接sql语句
-        return AjaxResult.returnMessage(new PageInfo<>(roleList)); //将分页结果放入pageUserList
+        return AjaxResult.returnMessage(new PageInfo<>(roleList));
     }
 
 
