@@ -44,14 +44,15 @@ public class RoleController {
 
     /**
      * 获取单个角色信息
-     * @param role_key 角色权限字符串
+     * @param type 类型
+     * @param content 值
      * @return 角色信息
      */
     @ApiOperation(value = "获取单个角色信息")
     @ApiImplicitParam()
     @GetMapping("/getOneRole")
-    public AjaxResult getOneRole(@RequestParam("role_key") String role_key){
-        return roleService.getOneRole(role_key);
+    public AjaxResult getOneRole(String type,String content){
+        return roleService.getOneRole(type,content);
     }
 
     /**
@@ -77,7 +78,7 @@ public class RoleController {
      */
     @ApiOperation(value = "获取单个角色信息")
     @ApiImplicitParam()
-    @GetMapping("/insertRole")
+    @PostMapping("/insertRole")
     public AjaxResult insertRole(@RequestBody Map<String, Object> map){
         return roleService.insertRole(map);
     }
@@ -90,7 +91,7 @@ public class RoleController {
      */
     @ApiOperation(value = "修改角色信息")
     @ApiImplicitParam()
-    @GetMapping("/updateRole")
+    @PostMapping("/updateRole")
     public AjaxResult updateRole(@RequestBody Map<String, Object> map){
         return roleService.updateRole(map);
     }

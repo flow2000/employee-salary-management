@@ -28,10 +28,19 @@ public class StringUtils {
         return salt;
     }
 
+    /**
+     * 字符串转map数组
+     * @param searchKey 关键字
+     * @param searchValue 值
+     * @return map数组
+     */
     public static List<Map> strToMapList(String searchKey, String searchValue){
+        List<Map> list = new ArrayList<>();
+        if(isEmpty(searchKey)||isEmpty(searchValue)){
+            return list;
+        }
         String[] keyArray = searchKey.split(";");
         String[] valueArray = searchValue.split(";"); //字符串转数组
-        List<Map> list = new ArrayList<>();
         for (int i = 0; i < keyArray.length && i<valueArray.length; i++) {
             Map<String,Object> map = new HashMap<>();
             if(!isEmpty(keyArray[i]) && !isEmpty(valueArray[i]) ){ //不为空

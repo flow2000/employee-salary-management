@@ -12,7 +12,7 @@ public interface RoleService {
 
     AjaxResult getPageRole(Integer page, Integer limit);
 
-    AjaxResult getOneRole(String login_name);
+    AjaxResult getOneRole(String type,String content);
 
     AjaxResult searchRole(int page, int limit, String searchKey, String searchValue);
 

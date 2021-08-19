@@ -12,9 +12,17 @@
         where del_flag=0
     </select>
 
-    <select id="getOneRole" resultType="java.util.HashMap" parameterType="String">
-        select* from role
-        where role_key=#{role_key}
+    <select id="getOneRole" resultType="com.salary.entity.Role" parameterType="String">
+        SELECT role.*
+        FROM role
+        WHERE role.del_flag=0
+        <foreach collection="list" index="index" item="item">
+            <if test="item.searchType != null and item.searchType != ''
+             and item.searchContent != null and item.searchContent != ''">
+                and ${item.searchType} = #{item.searchContent}
+            </if>
+        </foreach>
+        limit 1
     </select>
 
     <select id="searchRole" parameterType="java.util.List" resultType="java.util.HashMap">
@@ -30,7 +38,7 @@
         ORDER BY role_id ASC
     </select>
 
-    <insert id="insertRole" parameterType="java.util.HashMap">
+    <insert id="insertRole" parameterType="java.util.HashMap" keyProperty="role_id" useGeneratedKeys="true">
         insert role(
             role_key,
             role_name,
@@ -42,10 +50,10 @@
             ) value(
             #{role_key},
             #{role_name},
-            #{status},
-            #{del_flag},
+            0,
+            0,
             #{creater},
-            #{create_time},
+            NOW(),
             #{remark}
         )
     </insert>
@@ -59,6 +67,16 @@
         </foreach>
     </select>
 
+    <update id="updateRole" parameterType="java.util.HashMap">
+        update role
+        set role_name=#{role_name},
+        role_key=#{role_key},
+        remark=#{remark},
+        updater=#{updater},
+        update_time=NOW()
+        where role_id=#{role_id}
+    </update>
+
     <update id="changeRoleStatus" parameterType="java.util.HashMap">
         update role
         set status=#{status},
@@ -66,6 +84,21 @@
         update_time=NOW()
         where role_id=#{role_id}
     </update>
+
+    <delete id="deleteRoleMenu">
+        delete from role_menu
+        where role_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertRoleMenu">
+        insert into role_menu(role_id, menu_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.role_id},#{item.menu_id})
+        </foreach>
+    </insert>
 
     <update id="deleteRole">
         update role

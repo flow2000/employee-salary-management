@@ -40,59 +40,32 @@ function searchRole(table) {
 
 //添加角色
 function insertRole(form,table) {
-    var body;
-    var iframeWindow;
+    let body;
+    let iframeWindow;
+    var user_id=$.cache.get("user").user.user_id;
     var options={
         title:"添加角色",
-        area: ['30%', '90%'],
+        area: ['50%', '95%'],
         btn:['确认','取消'],
         content:'insert',
         success: function(layero, index){
             body=layer.getChildFrame('body',index);
             iframeWindow = window[layero.find('iframe')[0]['name']];
-            valuation(iframeWindow);
         },
         yes: function (index, layero){
-            var login_name = $.common.getFormValue(body,"#login_name").val();
-            var password = $.common.getFormValue(body,"#password").val();
-            var role_id = $.common.getFormValue(body,"#role_id").val();
-            var dept_id = $.common.getFormValue(body,"#dept_id").val();
-            var status = $.common.getFormValue(body,"input[name='status']:checked").val();
-
-            if(login_name===''){
-                $.modal.msgWarning('登录名不为空',function () {});
-                return;
-            }
-            if(password===''){
-                $.modal.msgWarning('密码不为空',function () {});
-                return;
-            }
-            if(role_id===''){
-                $.modal.msgWarning('角色不为空',function () {});
-                return;
-            }
-
+            var menuIds = $.map(iframeWindow.tree.getCheckedNodes(), function (row) {
+                return row["id"];
+            }).join();
             var data = {
-                "user_id": 0,
-                "login_name": login_name,
-                "password": hex_md5(password),
-                "dept_id": dept_id,
-                "user_name": $.common.getFormValue(body,"#user_name").val(),
-                "real_name": $.common.getFormValue(body,"#real_name").val(),
-                "role_id": role_id,
-                "phone_number": $.common.getFormValue(body,"#phone_number").val(),
-                "email": $.common.getFormValue(body,"#email").val(),
-                "status": status==='on'?'0':'1',
-                "sex": $.common.getFormValue(body,"#sex").val(),
-                "age": $.common.getFormValue(body,"#age").val(),
+                "user_id": user_id,
+                "role_name": $.common.getFormValue(body,"#role_name").val(),
+                "role_id": 0,
+                "role_key": $.common.getFormValue(body,"#role_key").val(),
                 "remark": $.common.getFormValue(body,"#remark").val(),
-                "creater": $.cache.get('user').user.user_id,
+                "creater": user_id,
+                "menuIds" : menuIds,
             };
-            if(dept_id===''){
-                data.dept_id=undefined;
-                delete data.dept_id;
-            }
-            $.operate.jsonPost(crx+'/user/insertUser',JSON.stringify(data),function (result) {
+            $.operate.jsonPost(crx+'/role/insertRole',JSON.stringify(data),function (result) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
@@ -104,19 +77,9 @@ function insertRole(form,table) {
             });
         },
         end:function () {
-            $('#insertUser')[0].reset();
+            $('#insertRole')[0].reset();
         }
     };
-    //赋值
-    function valuation(iframeWindow){
-        $.each($.cache.get('depts'),function(i,v){
-            body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
-        });
-        $.each($.cache.get('roles'),function(i,v){
-            body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
-        });
-        iframeWindow.layui.form.render();
-    }
     $.modal.open(options);
 }
 
@@ -198,36 +161,32 @@ function exportRoleFile(excel){
 
 //编辑角色
 function updateRole(form,data){
-    var body;
-    var iframeWindow;
+    let body;
+    let iframeWindow;
+    var user_id=$.cache.get("user").user.user_id;
     var options={
         title:"编辑角色",
-        area: ['30%', '95%'],
+        area: ['50%', '95%'],
         btn:['确认','取消'],
-        content:'update',
+        content:'update?role_id='+data.role_id,
         success: function(layero, index){
             body=layer.getChildFrame('body',index);
             iframeWindow = window[layero.find('iframe')[0]['name']];
             valuation(iframeWindow);
         },
         yes: function (index, layero){
+            var menuIds = $.map(iframeWindow.tree.getCheckedNodes(), function (row) {
+                return row["id"];
+            }).join();
             var data = {
-                "user_id": $.common.getFormValue(body,"#user_id").val(),
-                "dept_id": $.common.getFormValue(body,"#dept_id").val(),
+                "user_id": user_id,
+                "role_name": $.common.getFormValue(body,"#role_name").val(),
                 "role_id": $.common.getFormValue(body,"#role_id").val(),
-                "phone_number": $.common.getFormValue(body,"#phone_number").val(),
-                "email": $.common.getFormValue(body,"#email").val(),
-                "sex": $.common.getFormValue(body,"#sex").val(),
-                "age": $.common.getFormValue(body,"#age").val(),
+                "role_key": $.common.getFormValue(body,"#role_key").val(),
                 "remark": $.common.getFormValue(body,"#remark").val(),
                 "updater": $.cache.get('user').user.user_id,
+                "menuIds" : menuIds,
             };
-            if(data.dept_id===''){
-                data.dept_id=null;
-            }
-            if(data.age===''){
-                data.age=null;
-            }
             $.operate.jsonPost(crx+'/role/updateRole',JSON.stringify(data),function (result) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
@@ -240,32 +199,15 @@ function updateRole(form,data){
             });
         },
         end:function () {
-            $('#updateUser')[0].reset();
+            $('#updateRole')[0].reset();
         }
     };
     //赋值
     function valuation(iframeWindow){
-        $.each($.cache.get('depts'),function(i,v){
-            body.contents().find("#dept_id").append("<option value=\""+v.dept_id+"\">"+v.dept_name+"</option>");
-            if(v.dept_id===data.dept_id){
-                body.contents().find("#dept_id").find("option[value="+v.dept_id+"]").prop("selected",true);
-            }
-        });
-        $.each($.cache.get('roles'),function(i,v){
-            body.contents().find("#role_id").append("<option value=\""+v.role_id+"\">"+v.role_name+"</option>");
-            if(v.role_id===data.role_id){
-                body.contents().find("#role_id").find("option[value="+v.role_id+"]").prop("selected",true);
-            }
-        });
-        $.common.setFormValuate(body,"#user_id",data.user_id);
-        $.common.setFormValuate(body,"#login_name",data.login_name);
-        $.common.setFormValuate(body,"#dept_id",data.dept_id);
+        $.common.setFormValuate(body,"#role_name",data.role_name);
         $.common.setFormValuate(body,"#role_id",data.role_id);
-        $.common.setFormValuate(body,"#phone_number",data.phone_number);
-        $.common.setFormValuate(body,"#email",data.email);
-        $.common.setFormValuate(body,"#age",data.age);
+        $.common.setFormValuate(body,"#role_key",data.role_key);
         $.common.setFormValuate(body,"#remark",data.remark);
-        body.contents().find("#sex").find("option[value="+data.sex+"]").prop("selected",true);
         iframeWindow.layui.form.render();
     }
     $.modal.open(options);

@@ -11,5 +11,11 @@ import java.util.Map;
 @Repository
 public interface MenuDao {
 
+    List<Menu> getAllMenu();
+
     List<Menu> getRoleMenu(int role_id);
+
+    List<Menu> getAllUserMenu(int user_id);
+
+    List<String> getRoleMenuPerms(int role_id);
 }

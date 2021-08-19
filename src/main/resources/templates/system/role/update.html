@@ -1,9 +1,93 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
-<head th:replace="header :: header('角色修改')"></head>
+<head >
+    <th:block th:include="header :: header('角色修改')"/>
+    <th:block th:include="header :: ztree-css"/>
+</head>
 <body>
+<th:block th:include="header :: footer"/>
+<th:block th:include="header :: ztree-js"/>
+<!-- 编辑用户信息 -->
+<form class="layui-form layuimini-form"  id="updateRole">
+    <input type="text" id="role_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label required" >角色名称：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="role_name" value="" class="form-control"/>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label required">权限字符：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="role_key" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="text" id="remark" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <label class="layui-form-label">菜单权限：</label>
+        <div class="layui-input-block" style="width: 60%;">
+            <input type="checkbox" lay-filter="action" value="1" lay-skin="primary" title="展开/折叠">
+            <input type="checkbox" lay-filter="action" value="2" lay-skin="primary" title="全选/全不选">
+            <input type="checkbox" lay-filter="action" value="3" lay-skin="primary" checked title="父子联动">
+        </div>
+    </div>
+    <div id="menuTrees" class="ztree ztree-border"></div>
+</form>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+        var user_id=$.cache.get("user").user.user_id;
+        var role_id=getQueryString('role_id');
+        //菜单权限赋值
+        var url = crx + "/menu/getRoleMenuTree?role_id=" + role_id+"&user_id="+user_id;
+        var options = {
+            id: "menuTrees",
+            url: url,
+            check: { enable: true },
+            expandLevel: 0
+        };
+        $('#role_id').val(role_id);
+        $.tree.init(options);
+        //监听复选框操作
+        form.on('checkbox(action)', function (data) {
+            var type = data.value;
+            var checked = data.elem.checked;
+            if (type == 1) {
+                if (checked) {
+                    $._tree.expandAll(true);
+                } else {
+                    $._tree.expandAll(false);
+                }
+            } else if (type == "2") {
+                if (checked) {
+                    $._tree.checkAllNodes(true);
+                } else {
+                    $._tree.checkAllNodes(false);
+                }
+            } else if (type == "3") {
+                if (checked) {
+                    $._tree.setting.check.chkboxType = { "Y": "ps", "N": "ps" };
+                } else {
+                    $._tree.setting.check.chkboxType = { "Y": "", "N": "" };
+                }
+            }
+        });
+    });
 
-<div th:replace="header :: footer"></div>
-update
+    //返回从该网页中截取参数的值
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null)
+            return unescape(r[2]);
+        return null;
+    }
+
+</script>
 </body>
 </html>

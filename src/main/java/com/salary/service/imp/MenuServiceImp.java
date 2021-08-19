@@ -2,8 +2,10 @@ package com.salary.service.imp;
 
 import com.salary.dao.MenuDao;
 import com.salary.entity.Menu;
+import com.salary.entity.Ztree;
 import com.salary.service.MenuService;
 import com.salary.util.AjaxResult;
+import com.salary.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,20 @@ public class MenuServiceImp implements MenuService {
     private MenuDao menuDao;
 
     @Override
+    public List<Menu> getAllMenu() {
+        return menuDao.getAllMenu();
+    }
+
+    @Override
     public AjaxResult getRoleMenu(int role_id) {
         return AjaxResult.returnMessage(menuDao.getRoleMenu(role_id));
     }
 
+    /**
+     * 获取菜单信息
+     *  @param role_id 角色id
+     * @return 菜单信息
+     */
     @Override
     public Map<String, Object> getMenu(int role_id) {
         Map<String,Object> resultMap = new HashMap<>();
@@ -56,5 +68,76 @@ public class MenuServiceImp implements MenuService {
         return resultMap;
     }
 
+    /**
+     * 根据角色ID和用户id查询菜单树
+     *
+     * @param role_id 角色id
+     * @param user_id 用户id
+     * @return 菜单树
+     */
+    @Override
+    public List<Ztree> getRoleMenuTree(int role_id,int user_id)
+    {
+        List<Ztree> ztrees = new ArrayList<Ztree>();
+        List<Menu> menuList = menuDao.getAllUserMenu(user_id);//获取用户对应得到的菜单
+        if (role_id!=0)
+        {
+            List<String> roleMenuList = menuDao.getRoleMenuPerms(role_id);//获取角色对应的菜单权限
+            ztrees = initZtree(menuList, roleMenuList, true);
+        }
+        else
+        {
+            ztrees = initZtree(menuList, null, true);
+        }
+        return ztrees;
+    }
 
+    /**
+     * 对象转菜单树
+     *
+     * @param menuList 菜单列表
+     * @return 树结构列表
+     */
+    public List<Ztree> initZtree(List<Menu> menuList)
+    {
+        return initZtree(menuList, null, false);
+    }
+
+    /**
+     * 对象转菜单树
+     *
+     * @param menuList 菜单列表
+     * @param roleMenuList 角色已存在菜单列表
+     * @param permsFlag 是否需要显示权限标识
+     * @return 树结构列表
+     */
+    public List<Ztree> initZtree(List<Menu> menuList, List<String> roleMenuList, boolean permsFlag)
+    {
+        List<Ztree> ztrees = new ArrayList<Ztree>();
+        for (Menu menu : menuList)
+        {
+            Ztree ztree = new Ztree();
+            ztree.setId(menu.getMenu_id());
+            ztree.setPId(menu.getParent_id());
+            ztree.setName(transMenuName(menu, permsFlag));
+            ztree.setTitle(menu.getTitle());
+            if (roleMenuList!=null)
+            {
+                ztree.setChecked(roleMenuList.contains(menu.getMenu_id() + menu.getPerms()));
+            }
+            ztrees.add(ztree);
+        }
+        return ztrees;
+    }
+
+    public String transMenuName(Menu menu, boolean permsFlag)
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append(menu.getTitle());
+        if (permsFlag)
+        {
+            sb.append("<font color=\"#888\">&nbsp;&nbsp;&nbsp;" + menu.getPerms() + "</font>");
+        }
+        return sb.toString();
+    }
 }
