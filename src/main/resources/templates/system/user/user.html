@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head th:replace="header :: header('用户管理')"></head>
+<head >
+    <th:block th:include="header :: header('用户管理')"/>
+    <th:block th:include="header :: ztree-css"/>
+</head>
 <body>
-<div th:replace="header :: footer"></div>
+<th:block th:include="header :: footer"/>
 <div class="layuimini-container">
     <div class="layuimini-main">
         <!--头部工具栏-->
