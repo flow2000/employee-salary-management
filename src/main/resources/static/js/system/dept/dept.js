@@ -44,7 +44,7 @@ function insertDept(form,table) {
     var iframeWindow;
     var options={
         title:"添加部门",
-        area: ['30%', '60%'],
+        area: ['35%', '60%'],
         btn:['确认','取消'],
         content:'insert',
         success: function(layero, index){
