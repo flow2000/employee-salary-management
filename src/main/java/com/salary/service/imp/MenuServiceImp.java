@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,8 @@ public class MenuServiceImp implements MenuService {
     @Override
     public Map<String, Object> getMenu(int role_id) {
         Map<String,Object> resultMap = new HashMap<>();
-        List<Menu> menuList = menuDao.getRoleMenu(role_id);
+        List<Menu> menuList = loadMenuTree(menuDao.getRoleMenu(role_id));
+
         Menu menu = null;
 
         List<Object> list = new ArrayList<>();
@@ -66,6 +68,29 @@ public class MenuServiceImp implements MenuService {
         resultMap.put("logoInfo", menu);
 
         return resultMap;
+    }
+
+    private List<Menu> loadMenuTree(List<Menu> allMenus) {
+        //存返回数据
+        List<Menu> totaltype = new ArrayList<>();
+        //使用map来装前面查到的所有数据
+        Map<BigInteger, Menu> map = new HashMap<>();
+
+        for (Menu p:allMenus){
+            map.put(p.getMenu_id(),p);
+        }
+
+        //遍历所有类型，如果是最顶级父类型就直接装, 然后用这个父类型的children集合取装取当前数据
+
+        for(Menu p:allMenus){
+            if(p.getParent_id().intValue()==0){
+                totaltype.add(p);
+            }else{
+                Menu parents=map.get(p.getParent_id());
+                parents.getChild().add(p);
+            }
+        }
+        return totaltype;
     }
 
     /**

@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单实体类
@@ -30,7 +32,7 @@ public class Menu {
     private String icon;         //菜单图标
     private String visible;      //菜单状态
     private String target;       //打开方式
-    private Object child;        //子菜单
+    private List<Menu> child=new ArrayList<>();        //子菜单
     private String image;        //图片
     private String creater;      //创建者
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
