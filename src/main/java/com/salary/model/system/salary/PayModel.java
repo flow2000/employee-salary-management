@@ -8,20 +8,10 @@ import springfox.documentation.annotations.ApiIgnore;
 @Controller
 @RequestMapping("/system/salary")
 @ApiIgnore
-public class SalaryModel {
+public class PayModel {
 
-    @GetMapping("/role")
+    @GetMapping("/pay")
     public String role(){
-        return "system/role/role";
-    }
-
-    @GetMapping("/insert")
-    public String insert(){
-        return "system/role/insert";
-    }
-
-    @GetMapping("/update")
-    public String update(){
-        return "system/role/update";
+        return "system/salary/pay";
     }
 }
