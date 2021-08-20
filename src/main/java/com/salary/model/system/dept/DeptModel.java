@@ -1,13 +1,11 @@
 package com.salary.model.system.dept;
 
-import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/system/dept")
-@Api(value="DeptModel",tags="部门管理界面")
 public class DeptModel {
 
     @GetMapping("/dept")
