@@ -1,11 +1,11 @@
 package com.salary.model;
 
-import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
-@Api(value="LoginModel",tags="登录界面")
+@ApiIgnore
 public class LoginModel {
 
     @GetMapping("/login")

@@ -1,8 +1,10 @@
 package com.salary.config;
 
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
@@ -42,7 +44,8 @@ public class SwaggerConfig {
         pars.add(token.build());
         pars.add(login_name.build());  //根据每个方法名也知道当前方法在设置什么参数
         return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.any())// 对所有api进行监控
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))//错误路径不监控
                 .build()
                 .globalOperationParameters(pars)
                 .apiInfo(apiInfo());
