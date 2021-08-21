@@ -109,4 +109,14 @@
             #{id}
         </foreach>
     </update>
+
+    <select id="selectRoleKeys" resultType="map">
+        select distinct r.role_id, r.role_name, r.role_key,
+        r.status, r.del_flag, r.create_time, r.remark
+        from role r
+        left join user_role ur on ur.role_id = r.role_id
+        left join user u on u.user_id = ur.user_id
+        left join dept d on u.dept_id = d.dept_id
+        where r.del_flag=0 and u.user_id=#{user_id}
+    </select>
 </mapper>

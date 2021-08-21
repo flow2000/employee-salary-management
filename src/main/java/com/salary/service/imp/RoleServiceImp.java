@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -225,6 +222,11 @@ public class RoleServiceImp implements RoleService {
             return AjaxResult.toAjax(roleDao.deleteRole(array));
         }
         return AjaxResult.error("删除失败");
+    }
+
+    @Override
+    public Set<String> selectRoleKeys(BigInteger user_id) {
+        return roleDao.selectRoleKeys(user_id);
     }
 
     /**

@@ -68,6 +68,12 @@
             <version>1.2.4</version>
         </dependency>
 
+        <!-- SpringBoot 拦截器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!--引入pagehelper分页插件依赖-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>

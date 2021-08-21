@@ -11,7 +11,8 @@
     <div class="layuimini-main">
         <!--头部工具栏-->
         <script type="text/html" id="headerToolBar">
-            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF" action="">
+            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF;"
+                  th:hidden="!${@permission.hasPermi('system:role:select')}" action="">
                 <div class="layui-inline">
                     <label class="layui-form-label">角色名称</label>
                     <div class="layui-input-inline">
@@ -47,18 +48,26 @@
 
         <!--侧边栏-->
         <script type="text/html" id="sideToolBar">
-            {{#  if(d.role_id!=1){ }}
-            <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateRole"></a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger layui-icon-delete layui-icon"
-               lay-event="deleteRole"></a>
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:role:update')}]];
+                var deleteFlag = [[${@permission.hasPermi('system:role:delete')}]];
+            }}
+            {{#  if(d.user_id!=1&&updateFlag){ }}
+                <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateRole"></a>
+            {{#  } }}
+            {{#  if(d.user_id!=1&&deleteFlag){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger layui-icon-delete layui-icon"
+                   lay-event="deleteRole"></a>
             {{#  } }}
         </script>
 
         <!--侧边栏状态开关-->
         <script type="text/html" id="status">
-            {{#  if(d.role_id!=1){ }}
-            <input type="checkbox" name = "status" value = {{d.role_id}}
-                   lay-skin="switch" lay-filter="status" {{ d.status == '0' ? 'checked' : '' }}>
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:user:update')}]];
+                if(d.user_id!=1&&updateFlag){ }}
+                <input type="checkbox" name = "status" value = {{d.role_id}}
+                       lay-skin="switch" lay-filter="status" {{ d.status == '0' ? 'checked' : '' }}>
             {{#  } }}
         </script>
     </div>
@@ -70,22 +79,25 @@
     if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)){
         $.cache.init();
     }
+    var insertFlag = [[${@permission.hasPermi('system:role:insert')}]];
+    var deleteFlag = [[${@permission.hasPermi('system:role:delete')}]];
+    var exportFlag = [[${@permission.hasPermi('system:role:export')}]];
     var defaultToolbar=[];
-    if(true){
+    if(insertFlag){
         defaultToolbar.push({
             title: '添加角色',
             layEvent: 'insertRole',
             icon: 'layui-icon-add-1'
         });
     }
-    if(true){
+    if(deleteFlag){
         defaultToolbar.push({
             title: '批量删除',
             layEvent: 'deleteCombineRole',
             icon: 'layui-icon-delete'
         });
     }
-    if(true){
+    if(exportFlag){
         defaultToolbar.push({
             title: '导出数据',
             layEvent: 'exportRoleFile',

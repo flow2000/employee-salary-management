@@ -35,4 +35,13 @@
 		order by m.parent_id, m.order_num
     </select>
 
+    <select id="selectPermsByUserId" resultType="String">
+		select distinct m.perms
+		from menu m
+             left join role_menu rm on m.menu_id = rm.menu_id
+             left join user_role ur on rm.role_id = ur.role_id
+             left join role r on r.role_id = ur.role_id
+		where m.visible = '0' and r.status = '0' and ur.user_id = #{user_id}
+    </select>
+
 </mapper>

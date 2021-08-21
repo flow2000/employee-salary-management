@@ -17,6 +17,10 @@ import com.salary.util.DigestPass;
 import com.salary.util.SaveCaptcha;
 import com.salary.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -91,22 +95,26 @@ public class UserServiceImp implements UserService {
         String key = session.getId();                     //获得sessionId
         String trueCaptcha = (String) session.getAttribute(key); //拿到正确的验证码
         if(!Objects.equals(trueCaptcha,userCaptcha)){ //比较验证码是否一致
-            User user = userDao.getOneUser((String)param.get("login_name")); //数据库查找用户
-            if(user!=null){ //用户不存在
-                DigestPass dp=new DigestPass();  //MD5摘要算法
-                String password = dp.getDigestString(param.get(PASSWORD)+user.getSalt()); //盐加密
-                if(Objects.equals(password,user.getPassword())){ //数据库的密码与盐加密后的密码比较是否一致
-                    Map<String, Object> map = new HashMap<>();
-                    user.setPassword("******");
-                    map.put("user",user);
-                    String token = tokenService.getToken(user); //根据user生成token
-                    map.put("token",token);
-                    redisTemplate.boundHashOps(user.getLogin_name()).putAll(map); //将map存进redis
-                    redisTemplate.expire(user.getLogin_name(), REDIS_TIMEOUT, TimeUnit.HOURS); //设置过期时间
-                    return AjaxResult.success("登录成功",map);
-                }
+            UsernamePasswordToken token1 = new UsernamePasswordToken(
+                    (String)param.get("login_name"),
+                    (String)param.get(PASSWORD)
+            );
+            Subject subject = SecurityUtils.getSubject();
+            try {
+                subject.login(token1); //登录
+                User user = (User) SecurityUtils.getSubject().getPrincipal();
+                Map<String, Object> map = new HashMap<>();
+                user.setPassword("******");
+                map.put("user",user);
+                String token = tokenService.getToken(user); //根据user生成token
+                map.put("token",token);
+                redisTemplate.boundHashOps(user.getLogin_name()).putAll(map); //将map存进redis
+                redisTemplate.expire(user.getLogin_name(), REDIS_TIMEOUT, TimeUnit.HOURS); //设置过期时间
+                return AjaxResult.success("登录成功",map);
+            }catch (AuthenticationException e)
+            {
+                return AjaxResult.error("用户或密码错误");
             }
-            return AjaxResult.error("用户或密码错误");
         }
         return AjaxResult.error("验证码错误");
     }
@@ -175,9 +183,6 @@ public class UserServiceImp implements UserService {
     @Override
     public AjaxResult getOneUser(String login_name) {
         User user = userDao.getOneUser(login_name);
-        if(user!=null) {
-            user.setPassword("*******");
-        }
         return AjaxResult.returnMessage(user);
     }
 

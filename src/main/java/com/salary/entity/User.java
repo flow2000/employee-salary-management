@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class User {
+public class User implements Serializable {
     private BigInteger user_id; //用户id
     private BigInteger dept_id; //部门id
     private String login_name;  //登录名

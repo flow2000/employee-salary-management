@@ -10,7 +10,8 @@
     <div class="layuimini-main">
         <!--头部工具栏-->
         <script type="text/html" id="headerToolBar">
-            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF" action="">
+            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF;"
+                  th:hidden="!${@permission.hasPermi('system:user:select')}" action="">
                 <div class="layui-inline">
                     <label class="layui-form-label">用户帐号</label>
                     <div class="layui-input-inline">
@@ -46,17 +47,29 @@
 
         <!--侧边栏-->
         <script type="text/html" id="sideToolBar">
-            {{#  if(d.user_id!=1){ }}
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:user:update')}]];
+                var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
+                var deleteFlag = [[${@permission.hasPermi('system:user:delete')}]];
+            }}
+
+            {{#  if(d.user_id!=1&&updateFlag){ }}
                 <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateUser"></a>
+            {{#  } }}
+            {{#  if(d.user_id!=1&&resetPwdFlag){ }}
                 <a class="layui-btn layui-btn-xs layui-icon-refresh layui-icon" lay-event="resetPassword"></a>
+            {{#  } }}
+            {{#  if(d.user_id!=1&&deleteFlag){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger layui-icon-delete layui-icon"
-                   lay-event="deleteUser"></a>
+                    lay-event="deleteUser"></a>
             {{#  } }}
         </script>
 
         <!--侧边栏状态开关-->
         <script type="text/html" id="status">
-            {{#  if(d.user_id!=1){ }}
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:user:update')}]];
+                if(d.user_id!=1&&updateFlag){ }}
                 <input type="checkbox" name = "status" value = {{d.user_id}}
                    lay-skin="switch" lay-filter="status" {{ d.status == '0' ? 'checked' : '' }}>
             {{#  } }}
@@ -70,22 +83,25 @@
     if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)){
         $.cache.init();
     }
+    var insertFlag = [[${@permission.hasPermi('system:user:insert')}]];
+    var deleteFlag = [[${@permission.hasPermi('system:user:delete')}]];
+    var exportFlag = [[${@permission.hasPermi('system:user:export')}]];
     var defaultToolbar=[];
-    if(true){
+    if(insertFlag){
         defaultToolbar.push({
             title: '添加用户',
             layEvent: 'insertUser',
             icon: 'layui-icon-add-1'
         });
     }
-    if(true){
+    if(deleteFlag){
         defaultToolbar.push({
             title: '批量删除',
             layEvent: 'deleteCombineUser',
             icon: 'layui-icon-delete'
         });
     }
-    if(true){
+    if(exportFlag){
         defaultToolbar.push({
             title: '导出数据',
             layEvent: 'exportUserFile',

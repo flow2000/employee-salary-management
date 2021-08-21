@@ -9,7 +9,8 @@
     <div class="layuimini-main">
         <!--头部工具栏-->
         <script type="text/html" id="headerToolBar">
-            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF" action="">
+            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF;"
+                  th:hidden="!${@permission.hasPermi('system:dept:select')}" action="">
                 <div class="layui-inline">
                     <label class="layui-form-label">部门名称</label>
                     <div class="layui-input-inline">
@@ -45,16 +46,26 @@
 
         <!--侧边栏-->
         <script type="text/html" id="sideToolBar">
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:dept:update')}]];
+                var deleteFlag = [[${@permission.hasPermi('system:dept:delete')}]];
+            }}
+            {{#  if(updateFlag){ }}
             <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateDept"></a>
+            {{#  } }}
+            {{#  if(deleteFlag){ }}
             <a class="layui-btn layui-btn-xs layui-btn-danger layui-icon-delete layui-icon"
                lay-event="deleteDept"></a>
+            {{#  } }}
         </script>
 
         <!--侧边栏状态开关-->
         <script type="text/html" id="status">
-            {{#  if(d.user_id!=1){ }}
-            <input type="checkbox" name = "status" value = {{d.dept_id}}
-                   lay-skin="switch" lay-filter="status" {{ d.status == '0' ? 'checked' : '' }}>
+            {{#
+                var updateFlag = [[${@permission.hasPermi('system:dept:update')}]];
+                if(updateFlag){ }}
+                <input type="checkbox" name = "status" value = {{d.dept_id}}
+                       lay-skin="switch" lay-filter="status" {{ d.status == '0' ? 'checked' : '' }}>
             {{#  } }}
         </script>
     </div>
@@ -67,29 +78,33 @@
     if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)){
         $.cache.init();
     }
+    var insertFlag = [[${@permission.hasPermi('system:dept:insert')}]];
+    var deleteFlag = [[${@permission.hasPermi('system:dept:delete')}]];
+    var mergeFlag = [[${@permission.hasPermi('system:dept:merge')}]];
+    var exportFlag = [[${@permission.hasPermi('system:dept:export')}]];
     var defaultToolbar=[];
-    if(true){
+    if(insertFlag){
         defaultToolbar.push({
             title: '添加部门',
             layEvent: 'insertDept',
             icon: 'layui-icon-add-1'
         });
     }
-    if(true){
+    if(deleteFlag){
         defaultToolbar.push({
             title: '批量删除',
             layEvent: 'deleteCombineDept',
             icon: 'layui-icon-delete'
         });
     }
-    if(true){
+    if(mergeFlag){
         defaultToolbar.push({
             title: '合并部门',
             layEvent: 'mergeDept',
             icon: 'layui-icon-transfer'
         });
     }
-    if(true){
+    if(exportFlag){
         defaultToolbar.push({
             title: '导出数据',
             layEvent: 'exportDeptFile',

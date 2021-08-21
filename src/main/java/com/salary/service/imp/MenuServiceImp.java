@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -115,6 +112,11 @@ public class MenuServiceImp implements MenuService {
             ztrees = initZtree(menuList, null, true);
         }
         return ztrees;
+    }
+
+    @Override
+    public Set<String> selectPermsByUserId(BigInteger user_id) {
+        return menuDao.selectPermsByUserId(user_id);
     }
 
     /**
