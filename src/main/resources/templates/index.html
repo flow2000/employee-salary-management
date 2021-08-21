@@ -220,7 +220,10 @@
         $.cache.init();
     }
 
-    document.getElementById("userName").innerText = (user.user.real_name);
+    var real_name = user.user.real_name;
+    if(real_name!==""&&real_name!==undefined&&real_name!==null&&real_name!==" "){
+        document.getElementById("userName").innerText = (real_name);
+    }
 
     layui.use(['jquery', 'layer', 'miniAdmin','form'], function () {
         var $ = layui.jquery,
