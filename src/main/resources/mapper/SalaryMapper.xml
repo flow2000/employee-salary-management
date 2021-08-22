@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.salary.dao.SalaryDao">
+
+    <sql id="selectSalaryVO">
+        SELECT s.salary_id,s.user_id,s.base_salary,s.reward_salary,s.overtime,s.percentage,s.bonus,s.punish_salary,s.`leave`,s.late,s.absence,s.total_salary,s.checked,s.check_result,s.fail_cause,s.check_time,s.create_time,s.remark
+        FROM salary s
+    </sql>
+
+    <select id="getAllSalary" resultType="com.salary.entity.Salary">
+        <include refid="selectSalaryVO"/>
+    </select>
+
+    <select id="getAllDeptSalaryById" resultType="com.salary.entity.Salary" parameterType="int">
+        <include refid="selectSalaryVO"/>
+        join user u on u.user_id=s.user_id
+        join dept d on d.dept_id=u.dept_id
+        where d.dept_id=#{dept_id}
+    </select>
+
+</mapper>
