@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.salary.dao.SalaryConfigDao">
+
+    <sql id="selectSalaryConfigVO">
+        SELECT config_id,user_id,base_salary,late_count,absence_count,overtime_count,updater,update_time,remark
+        FROM salary_config
+    </sql>
+    
+    <select id="getAllSalaryConfig" resultType="com.salary.entity.SalaryConfig">
+        <include refid="selectSalaryConfigVO"/>
+        ORDER BY config_id ASC
+    </select>
+
+    <update id="updateSalaryConfig" parameterType="com.salary.entity.SalaryConfig">
+        UPDATE salary_config
+        <set>
+            <if test="base_salary != null and base_salary != ''">base_salary = #{base_salary},</if>
+            <if test="late_count != null and late_count != ''">late_count = #{late_count},</if>
+            <if test="absence_count != null and absence_count != ''">absence_count = #{absence_count},</if>
+            <if test="overtime_count != null and overtime_count != ''">overtime_count = #{overtime_count},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updater != null and updater != ''">updater = #{updater},</if>
+            update_time=NOW()
+        </set>
+        WHERE config_id=#{config_id}
+    </update>
+
+    <insert id="insertSalaryConfig" parameterType="com.salary.entity.SalaryConfig">
+        insert into salary_config(
+            <if test="user_id != null and user_id != ''">user_id,</if>
+            <if test="base_salary != null and base_salary != ''">base_salary,</if>
+            <if test="late_count != null and late_count != ''">late_count,</if>
+            <if test="absence_count != null and absence_count != ''">absence_count,</if>
+            <if test="overtime_count != null and overtime_count != ''">overtime_count,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="creater != null and creater != ''">creater,</if>
+            create_time
+        )values(
+            <if test="user_id != null and user_id != ''">#{user_id},</if>
+            <if test="base_salary != null and base_salary != ''">#{base_salary},</if>
+            <if test="late_count != null and late_count != ''">#{late_count},</if>
+            <if test="absence_count != null and absence_count != ''">#{absence_count},</if>
+            <if test="overtime_count != null and overtime_count != ''">#{overtime_count},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="creater != null and creater != ''">#{creater},</if>
+            NOW()
+        )
+    </insert>
+
+</mapper>
