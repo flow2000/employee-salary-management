@@ -11,7 +11,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class InputModel {
 
     @GetMapping("/input")
-    public String role(){
-        return "system/salary/input";
+    public String input(){
+        return "system/salary/input/input";
     }
 }

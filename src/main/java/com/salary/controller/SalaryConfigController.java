@@ -42,6 +42,34 @@ public class SalaryConfigController {
     }
 
     /**
+     * 获取单个薪资配置信息
+     * @param login_name 登录名
+     * @return 薪资配置信息
+     */
+    @ApiOperation(value = "获取单个薪资配置信息")
+    @ApiImplicitParam()
+    @GetMapping("/getOneSalaryConfig")
+    public AjaxResult getOneSalaryConfig(@RequestParam("login_name") String login_name){
+        return salaryConfigService.getOneSalaryConfig(login_name);
+    }
+
+    /**
+     * 搜索薪资配置信息
+     * @param page 页码
+     * @param limit 数量
+     * @param login_name 帐号
+     * @param create_time 创建时间
+     * @return 查询结果
+     */
+    @ApiOperation(value = "搜索薪资配置信息")
+    @ApiImplicitParam
+    @GetMapping("/searchSalaryConfig")
+    public AjaxResult searchSalaryConfig(@RequestParam int page,@RequestParam int limit,
+                                         @RequestParam String login_name, @RequestParam String create_time){
+        return  salaryConfigService.searchSalaryConfig(page,limit,login_name,create_time);
+    }
+
+    /**
      * 添加薪资配置信息
      * @return 影响的行数
      */

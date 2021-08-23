@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="header :: header('薪资基本参数修改')"></head>
+<body>
+<div th:replace="header :: footer"></div>
+<!-- 编辑薪资基本参数信息 -->
+<form class="layui-form layuimini-form"  id="updateSalaryConfig">
+    <input type="text" id="config_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label" >登录名：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="login_name" value="" class="form-control" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">基本薪资：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="base_salary" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">请假扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="leave" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">迟到扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="late" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">旷工扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="absence" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">加班薪资：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="overtime" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+    var base_salary = $("#base_salary");
+    var leave = $("#leave");
+    var late = $("#late");
+    var absence = $("#absence");
+    var overtime = $("#overtime");
+    base_salary.blur( function(){
+        if(validateNumber(base_salary.val())){
+            $.modal.msgWarning("非法字符",function () {
+                base_salary.focus();
+            });
+        }
+    });
+    leave.blur( function(){
+        if(validateNumber(leave.val())){
+            $.modal.msgWarning("非法字符",function () {
+                leave.focus();
+            });
+        }
+    });
+    late.blur( function(){
+        if(validateNumber(late.val())){
+            $.modal.msgWarning("非法字符",function () {
+                late.focus();
+            });
+        }
+    });
+    absence.blur( function(){
+        if(validateNumber(absence.val())){
+            $.modal.msgWarning("非法字符",function () {
+                absence.focus();
+            });
+        }
+    });
+    overtime.blur( function(){
+        if(validateNumber(overtime.val())){
+            $.modal.msgWarning("非法字符",function () {
+                overtime.focus();
+            });
+        }
+    });
+    function validateNumber(value) {
+        return !(/^[1-9][0-9]*([.][0-9]+)?$/.test(value));
+    }
+
+</script>
+</body>
+</html>

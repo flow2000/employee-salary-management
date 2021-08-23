@@ -8,10 +8,15 @@ import springfox.documentation.annotations.ApiIgnore;
 @Controller
 @RequestMapping("/system/salary")
 @ApiIgnore
-public class SettingModel {
+public class ConfigModel {
 
-    @GetMapping("/setting")
-    public String role(){
-        return "system/salary/setting";
+    @GetMapping("/config")
+    public String config(){
+        return "/system/salary/config/config";
+    }
+
+    @GetMapping("/update")
+    public String update(){
+        return "/system/salary/config/update";
     }
 }

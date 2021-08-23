@@ -27,13 +27,14 @@ public class Salary implements Serializable {
     private BigInteger user_id;         //用户id
     private BigDecimal base_salary;     //基本薪资
     private BigDecimal reward_salary;   //奖励绩效
-    private BigDecimal overtime;        //加班薪资
+    private int week_time_count;        //周末加班时长
+    private int festival_time_count;    //节日加班时长
     private BigDecimal percentage;      //提成
     private BigDecimal bonus;           //奖金
     private BigDecimal punish_salary;   //惩罚扣薪
-    private BigDecimal leave;           //请假
-    private BigDecimal late;            //迟到
-    private BigDecimal absence;         //旷工
+    private int leave_count;            //请假扣薪
+    private int late_count;             //迟到扣薪
+    private int absence_count;          //旷工扣薪
     private BigDecimal total_salary;    //总计
     private String checked;             //是否已审核
     private String check_result;        //审核结果

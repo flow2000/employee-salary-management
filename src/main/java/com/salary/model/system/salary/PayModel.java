@@ -11,7 +11,7 @@ import springfox.documentation.annotations.ApiIgnore;
 public class PayModel {
 
     @GetMapping("/pay")
-    public String role(){
-        return "system/salary/pay";
+    public String pay(){
+        return "system/salary/pay/pay";
     }
 }

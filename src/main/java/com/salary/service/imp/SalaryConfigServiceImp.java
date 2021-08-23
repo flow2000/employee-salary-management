@@ -5,11 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.salary.dao.SalaryConfigDao;
 import com.salary.entity.SalaryConfig;
 import com.salary.service.SalaryConfigService;
+import com.salary.util.AjaxResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -33,6 +34,21 @@ public class SalaryConfigServiceImp implements SalaryConfigService {
     @Override
     public int updateSalaryConfig(SalaryConfig salaryConfig) {
         return salaryConfigDao.updateSalaryConfig(salaryConfig);
+    }
+
+    @Override
+    public AjaxResult getOneSalaryConfig(String login_name) {
+        return null;
+    }
+
+    @Override
+    public AjaxResult searchSalaryConfig(int page, int limit,String login_name, String create_time) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("login_name",login_name);
+        map.put("create_time",create_time);
+        PageHelper.startPage(page, limit);
+        List<SalaryConfig> salaryConfigList = salaryConfigDao.searchSalaryConfig(map);
+        return AjaxResult.returnMessage(new PageInfo<>(salaryConfigList));
     }
 
     @Override
