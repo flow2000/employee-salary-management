@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
-@RequestMapping("/system/salary")
+@RequestMapping("/system/salary/config")
 @ApiIgnore
 public class ConfigModel {
 
     @GetMapping("/config")
     public String config(){
-        return "/system/salary/config/config";
+        return "system/salary/config/config";
     }
 
     @GetMapping("/update")
     public String update(){
-        return "/system/salary/config/update";
+        return "system/salary/config/update";
     }
 }

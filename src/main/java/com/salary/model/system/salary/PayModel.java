@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
-@RequestMapping("/system/salary")
+@RequestMapping("/system/salary/pay")
 @ApiIgnore
 public class PayModel {
 

@@ -2,17 +2,112 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.salary.dao.SalaryDao">
 
-    <sql id="selectSalaryVO">
-        SELECT s.salary_id,s.user_id,s.base_salary,s.reward_salary,s.overtime,s.percentage,s.bonus,s.punish_salary,s.`leave`,s.late,s.absence,s.total_salary,s.checked,s.check_result,s.fail_cause,s.check_time,s.create_time,s.remark
-        FROM salary s
-    </sql>
-
     <select id="getAllSalary" resultType="com.salary.entity.Salary">
-        <include refid="selectSalaryVO"/>
+        select s.*,u.login_name
+        from salary s
+        join user u on u.user_id=s.user_id
+    </select>
+
+    <select id="getOneSalary" parameterType="BigInteger" resultType="com.salary.entity.Salary">
+        select s.*,u.login_name
+        from salary s
+        join user u on u.user_id=s.user_id
+        where s.user_id=#{user_id}
+    </select>
+
+    <select id="searchSalary" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
+        select s.*,u.login_name
+        from salary s
+        join user u on u.user_id=s.user_id
+        <where>
+            <if test="login_name != null and login_name != ''">u.login_name like concat('%', #{login_name}, '%')</if>
+            <if test="create_time != null and create_time != ''">and DATE_FORMAT(s.create_time,'%Y-%m') = #{create_time}</if>
+        </where>
+    </select>
+
+    <update id="updateTotalSalary" parameterType="com.salary.entity.Salary">
+        update salary
+        <set>
+            <if test="total_salary != null and total_salary != ''">total_salary = #{total_salary},</if>
+            update_time=NOW()
+        </set>
+        WHERE salary_id=#{salary_id}
+    </update>
+
+    <update id="updateSalaryInput" parameterType="com.salary.entity.Salary">
+        update salary
+        <set>
+            <if test="base_salary != null and base_salary != ''">base_salary = #{base_salary},</if>
+            <if test="week_time != null and week_time != ''">week_time = #{week_time},</if>
+            <if test="festival_time != null and festival_time != ''">festival_time = #{festival_time},</if>
+            <if test="percentage != null and percentage != ''">percentage = #{percentage},</if>
+            <if test="bonus != null and bonus != ''">bonus = #{bonus},</if>
+            <if test="absence_count != null and absence_count != ''">absence_count = #{absence_count},</if>
+            <if test="late_count != null and late_count != ''">late_count = #{late_count},</if>
+            <if test="leave_count != null and leave_count != ''">leave_count = #{leave_count},</if>
+            update_time=NOW()
+        </set>
+        WHERE salary_id=#{salary_id}
+    </update>
+
+    <select id="getAllSalaryConfig" resultType="com.salary.entity.Salary">
+        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.updater,s.update_time,u.login_name
+        from salary s
+        join user u on u.user_id=s.user_id
+        order by s.create_time desc
+    </select>
+
+    <update id="updateSalaryConfig" parameterType="com.salary.entity.Salary">
+        UPDATE salary
+        <set>
+            <if test="base_salary != null and base_salary != ''">base_salary = #{base_salary},</if>
+            <if test="leave != null and leave != ''">`leave` = #{leave},</if>
+            <if test="late != null and late != ''">late = #{late},</if>
+            <if test="absence != null and late != ''">absence = #{absence},</if>
+            <if test="overtime != null and late != ''">overtime = #{overtime},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updater != null and updater != ''">updater = #{updater},</if>
+            update_time=NOW()
+        </set>
+        WHERE salary_id=#{salary_id}
+    </update>
+
+    <insert id="insertSalaryConfig" parameterType="com.salary.entity.Salary">
+        insert into salary_config(
+        <if test="user_id != null and user_id != ''">user_id,</if>
+        <if test="base_salary != null and base_salary != ''">base_salary,</if>
+        <if test="late != null and late != ''">late,</if>
+        <if test="absence != null and absence != ''">absence,</if>
+        <if test="overtime != null and overtime != ''">overtime,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="creater != null and creater != ''">creater,</if>
+        create_time
+        )values(
+        <if test="user_id != null and user_id != ''">#{user_id},</if>
+        <if test="base_salary != null and base_salary != ''">#{base_salary},</if>
+        <if test="late != null and late != ''">#{late},</if>
+        <if test="absence != null and absence != ''">#{absence},</if>
+        <if test="overtime != null and overtime != ''">#{overtime},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="creater != null and creater != ''">#{creater},</if>
+        NOW()
+        )
+    </insert>
+
+    <select id="searchSalaryConfig" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
+        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.updater,s.update_time,u.login_name
+        from salary s
+        join user u on u.user_id=s.user_id
+        <where>
+            <if test="login_name != null and login_name != ''">u.login_name like concat('%', #{login_name}, '%')</if>
+            <if test="create_time != null and create_time != ''">and DATE_FORMAT(s.create_time,'%Y-%m') = #{create_time}</if>
+        </where>
+        order by s.create_time desc
     </select>
 
     <select id="getAllDeptSalaryById" resultType="com.salary.entity.Salary" parameterType="int">
-        <include refid="selectSalaryVO"/>
+        select s.*,u.login_name
+        from salary s
         join user u on u.user_id=s.user_id
         join dept d on d.dept_id=u.dept_id
         where d.dept_id=#{dept_id}

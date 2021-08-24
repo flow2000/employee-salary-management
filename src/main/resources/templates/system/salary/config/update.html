@@ -5,7 +5,7 @@
 <div th:replace="header :: footer"></div>
 <!-- 编辑薪资基本参数信息 -->
 <form class="layui-form layuimini-form"  id="updateSalaryConfig">
-    <input type="text" id="config_id" style="display: none">
+    <input type="text" id="salary_id" style="display: none">
     <div class="layui-form-item">
         <label class="layui-form-label" >登录名：</label>
         <div class="layui-input-block" style="width: 50%;">
@@ -48,48 +48,35 @@
     layui.use(['form'], function () {
         form = layui.form;
     });
-    var base_salary = $("#base_salary");
-    var leave = $("#leave");
-    var late = $("#late");
-    var absence = $("#absence");
-    var overtime = $("#overtime");
-    base_salary.blur( function(){
-        if(validateNumber(base_salary.val())){
-            $.modal.msgWarning("非法字符",function () {
-                base_salary.focus();
-            });
-        }
+    $("#base_salary").blur( function(){
+        validateInput($("#base_salary"));
     });
-    leave.blur( function(){
-        if(validateNumber(leave.val())){
-            $.modal.msgWarning("非法字符",function () {
-                leave.focus();
-            });
-        }
+    $("#leave").blur( function(){
+        validateInput($("#leave"));
     });
-    late.blur( function(){
-        if(validateNumber(late.val())){
-            $.modal.msgWarning("非法字符",function () {
-                late.focus();
-            });
-        }
+    $("#late").blur( function(){
+        validateInput($("#late"));
     });
-    absence.blur( function(){
-        if(validateNumber(absence.val())){
-            $.modal.msgWarning("非法字符",function () {
-                absence.focus();
-            });
-        }
+    $("#absence").blur( function(){
+        validateInput($("#absence"));
     });
-    overtime.blur( function(){
-        if(validateNumber(overtime.val())){
-            $.modal.msgWarning("非法字符",function () {
-                overtime.focus();
-            });
-        }
+    $("#overtime").blur( function(){
+        validateInput($("#overtime"));
     });
-    function validateNumber(value) {
+
+    //非零开头的整数或小数
+    function NonZeroStartNumber (value) {
         return !(/^[1-9][0-9]*([.][0-9]+)?$/.test(value));
+    }
+    //验证是否输入合法实数
+    function validateInput (obj) {
+        if(obj.val()==='')
+            return;
+        if(NonZeroStartNumber(obj.val())){
+            $.modal.msgWarning("非法字符",function () {
+                obj.focus();
+            });
+        }
     }
 
 </script>

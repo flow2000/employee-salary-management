@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="header :: header('薪资基本参数修改')"></head>
+<body>
+<div th:replace="header :: footer"></div>
+<!-- 编辑奖惩录入信息 -->
+<form class="layui-form layuimini-form"  id="updateSalary">
+    <input type="text" id="salary_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label" >用户帐号：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="login_name" value="" class="form-control" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">周末加班：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="week_time" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">节日加班：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="festival_time" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提成：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="percentage" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">奖金：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="bonus" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">旷工次数：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="absence_count" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">迟到次数：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="late_count" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请假次数：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="leave_count" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+    $("#base_salary").blur( function(){
+        validateInput($("#base_salary"));
+    });
+    $("#week_time").blur( function(){
+        validateInput($("#week_time"));
+    });
+    $("#festival_time").blur( function(){
+        validateInput($("#festival_time"));
+    });
+    $("#percentage").blur( function(){
+        validateInput($("#percentage"));
+    });
+    $("#bonus").blur( function(){
+        validateInput($("#bonus"));
+    });
+    $("#absence_count").blur( function(){
+        validateInput($("#absence_count"));
+    });
+    $("#late_count").blur( function(){
+        validateInput($("#late_count"));
+    });
+    $("#leave_count").blur( function(){
+        validateInput($("#leave_count"));
+    });
+    //正整数
+    function NonZeroStartNumber (value) {
+        return !(/(^[1-9]\d*$)/.test(value));
+    }
+    //验证是否输入合法正整数
+    function validateInput (obj) {
+        if(obj.val()==='0'||obj.val()==='')
+            return;
+        if(NonZeroStartNumber(obj.val())){
+            $.modal.msgWarning("非法字符",function () {
+                obj.focus();
+            });
+        }
+    }
+</script>
+</body>
+</html>

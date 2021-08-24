@@ -2,7 +2,7 @@
 function searchSalaryConfig(table) {
     if($('#login_name').val()===''&&$('#create_time').val()===''){
         table.reload('layui-table',{
-            url:crx + '/salaryConfig/getPageSalaryConfig',
+            url:crx + '/salary/getPageSalaryConfig',
             page: {
                 curr: 1 //重新从第 1 页开始
             }
@@ -16,7 +16,7 @@ function searchSalaryConfig(table) {
             login_name = user.user.login_name;
         }
         table.reload('layui-table',{
-            url:crx + '/salaryConfig/searchSalaryConfig',
+            url:crx + '/salary/searchSalaryConfig',
             where: {
                 "login_name": $('#login_name').val(),
                 "create_time":$('#create_time').val(),
@@ -40,7 +40,7 @@ function searchSalaryConfig(table) {
 
 //导出薪资基本参数数据数据
 function exportSalaryConfigFile(excel) {
-    $.operate.get(crx+'/salaryConfig/getAllSalaryConfig',exportExcel);
+    $.operate.get(crx+'/salary/getAllSalaryConfig',exportExcel);
     function exportExcel(result){
         result.data.unshift({
             login_name: '用户账号',
@@ -158,7 +158,8 @@ function updateSalaryConfig(form,data) {
             var overtime = $.common.getFormValue(body,"#overtime");
 
             var sendData = {
-                "config_id":data.config_id,
+                "salary_id":data.salary_id,
+                "user_id":data.user_id,
                 "login_name": login_name.val(),
                 "base_salary": base_salary.val(),
                 "leave": leave.val(),
@@ -167,7 +168,7 @@ function updateSalaryConfig(form,data) {
                 "overtime": overtime.val(),
                 "updater": $.cache.get('user').user.user_id,
             };
-            $.operate.jsonPost(crx+'/salaryConfig/updateSalaryConfig',JSON.stringify(sendData),function (result) {
+            $.operate.jsonPost(crx+'/salary/updateSalaryConfig',JSON.stringify(sendData),function (result) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {
                         layer.close(index);
