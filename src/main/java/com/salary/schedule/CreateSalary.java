@@ -34,12 +34,12 @@ public class CreateSalary {
         log.info("处理创建薪资任务 处理结束");
     }
 
-    /**
-     * 测试
-     */
-    @Scheduled(fixedRate = 1000*60*60)
-    public void test() {
-        insertSalary();
-    }
+//    /**
+//     * 测试
+//     */
+//    @Scheduled(fixedRate = 1000*60*60)
+//    public void test() {
+//        insertSalary();
+//    }
 
 }
