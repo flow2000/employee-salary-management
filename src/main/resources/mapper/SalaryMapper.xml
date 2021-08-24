@@ -125,4 +125,19 @@
         where d.dept_id=#{dept_id}
     </select>
 
+    <insert id="insertSalaryByArray" parameterType="List">
+        insert into salary(
+        user_id,
+        create_time
+        )values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <if test="item.user_id != null and item.user_id != ''">
+            (
+                #{item.user_id},
+                NOW()
+            )
+            </if>
+        </foreach>
+    </insert>
+
 </mapper>

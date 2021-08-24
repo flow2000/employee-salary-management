@@ -61,4 +61,23 @@ public class StringUtils {
         return str==null||"".equals(str);
     }
 
+    /**
+     * map数组转字符串
+     * @param list map数组
+     * @param key 关键字
+     * @return map数组
+     */
+    public static String[] mapListToStr(List<Map> list,String key) {
+        String[] array = new String[list.size()];
+        int index=0;
+        for (int i = 0; i < list.size(); i++) {
+            Map map = list.get(i);
+            if(map.get(key)!=null){
+                array[index]= map.get(key).toString();
+                index++;
+            }
+        }
+        return array;
+    }
+
 }

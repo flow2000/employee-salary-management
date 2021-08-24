@@ -37,4 +37,5 @@ public interface SalaryDao {
 
     int deleteSalaryById(String[] array);
 
+    int insertSalaryByArray(List<Map> list);
 }
