@@ -161,6 +161,11 @@ public class SalaryServiceImp implements SalaryService {
         return salaryDao.insertSalaryConfig(salary);
     }
 
+    @Override
+    public int updateSalaryChecked(Salary salary) {
+        return salaryDao.updateSalaryChecked(salary);
+    }
+
     /**
      * 获取部门所有薪资信息
      * @return 部门所有薪资信息
@@ -179,6 +184,17 @@ public class SalaryServiceImp implements SalaryService {
         PageHelper.startPage(page, limit);
         List<Salary> deptSalaryList = salaryDao.getAllDeptSalaryById(dept_id);
         return new PageInfo<>(deptSalaryList);
+    }
+
+
+    @Override
+    public int deleteSalaryById(Map<String, Object> map) {
+        String user_id = (String) map.get("user_id");
+        if(user_id!=null) {
+            String[] array = user_id.split(";");
+            return salaryDao.deleteSalaryById(array);
+        }
+        return 0;
     }
 
 

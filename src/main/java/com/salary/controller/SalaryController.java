@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Api(value="SalaryController",tags="薪资接口")
 @RequestMapping("/api/salary")
@@ -142,6 +144,28 @@ public class SalaryController {
     @PostMapping("/updateSalaryConfig")
     public AjaxResult updateSalaryConfig(@RequestBody Salary salary){
         return AjaxResult.toAjax(salaryService.updateSalaryConfig(salary));
+    }
+
+    /**
+     * 审核薪资
+     * @return 影响的行数
+     */
+    @ApiOperation(value = "审核薪资")
+    @ApiImplicitParam()
+    @PostMapping("/updateSalaryChecked")
+    public AjaxResult updateSalaryChecked(@RequestBody Salary salary){
+        return AjaxResult.toAjax(salaryService.updateSalaryChecked(salary));
+    }
+
+    /**
+     * 删除薪资
+     * @return 影响的行数
+     */
+    @ApiOperation(value = "删除薪资")
+    @ApiImplicitParam()
+    @PostMapping("/deleteSalaryById")
+    public AjaxResult deleteSalaryById(@RequestBody Map<String, Object> map){
+        return AjaxResult.toAjax(salaryService.deleteSalaryById(map));
     }
 
     /**

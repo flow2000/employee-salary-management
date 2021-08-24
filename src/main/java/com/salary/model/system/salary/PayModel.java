@@ -14,4 +14,9 @@ public class PayModel {
     public String pay(){
         return "system/salary/pay/pay";
     }
+
+    @GetMapping("/update")
+    public String update(){
+        return "system/salary/pay/update";
+    }
 }

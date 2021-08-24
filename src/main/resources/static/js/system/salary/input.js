@@ -182,7 +182,6 @@ function updateSalary(form,data) {
                 "leave_count": leave_count.val(),
                 "updater": $.cache.get('user').user.user_id,
             };
-            console.log(sendData.user_id)
             $.operate.jsonPost(crx+'/salary/updateSalaryInput',JSON.stringify(sendData),function (result) {
                 if(result.code===0){
                     $.modal.msgSuccess(result.msg,function () {

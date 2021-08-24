@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="header :: header('审核薪资')"></head>
+<body>
+<div th:replace="header :: footer"></div>
+<!-- 审核薪资 -->
+<form class="layui-form layuimini-form"  id="updateSalary">
+    <input type="text" id="salary_id" style="display: none">
+    <div class="layui-form-item">
+        <label class="layui-form-label" >用户帐号：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="login_name" value="" class="form-control" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">基本薪资：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="base_salary" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">周末加班：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="week_time" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">节日加班：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="festival_time" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提成：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="percentage" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">奖金：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="bonus" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">旷工扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="absence_count" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">迟到扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="late_count" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">请假扣薪：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="leave_count" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">总计：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="total_salary" class="form-control" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">审核结果：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <select id="check_result" name="check_result">
+                <option value="1">通过</option>
+                <option value="0">不通过</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">不通过原因：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="fail_cause" class="form-control">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block" style="width: 50%;">
+            <input type="text" id="remark" class="form-control">
+        </div>
+    </div>
+</form>
+<script>
+    let form;
+    layui.use(['form'], function () {
+        form = layui.form;
+    });
+</script>
+</body>
+</html>

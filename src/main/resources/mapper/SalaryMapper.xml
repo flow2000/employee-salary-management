@@ -51,7 +51,7 @@
     </update>
 
     <select id="getAllSalaryConfig" resultType="com.salary.entity.Salary">
-        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.updater,s.update_time,u.login_name
+        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.create_time,s.updater,s.update_time,u.login_name
         from salary s
         join user u on u.user_id=s.user_id
         order by s.create_time desc
@@ -73,29 +73,17 @@
     </update>
 
     <insert id="insertSalaryConfig" parameterType="com.salary.entity.Salary">
-        insert into salary_config(
-        <if test="user_id != null and user_id != ''">user_id,</if>
-        <if test="base_salary != null and base_salary != ''">base_salary,</if>
-        <if test="late != null and late != ''">late,</if>
-        <if test="absence != null and absence != ''">absence,</if>
-        <if test="overtime != null and overtime != ''">overtime,</if>
-        <if test="remark != null and remark != ''">remark,</if>
-        <if test="creater != null and creater != ''">creater,</if>
-        create_time
+        insert into salary(
+            <if test="user_id != null and user_id != ''">user_id,</if>
+            create_time
         )values(
-        <if test="user_id != null and user_id != ''">#{user_id},</if>
-        <if test="base_salary != null and base_salary != ''">#{base_salary},</if>
-        <if test="late != null and late != ''">#{late},</if>
-        <if test="absence != null and absence != ''">#{absence},</if>
-        <if test="overtime != null and overtime != ''">#{overtime},</if>
-        <if test="remark != null and remark != ''">#{remark},</if>
-        <if test="creater != null and creater != ''">#{creater},</if>
-        NOW()
+            <if test="user_id != null and user_id != ''">#{user_id},</if>
+            NOW()
         )
     </insert>
 
     <select id="searchSalaryConfig" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
-        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.updater,s.update_time,u.login_name
+        select s.salary_id,s.user_id,s.base_salary,s.`leave`,s.late,s.absence,s.overtime,s.create_time,s.updater,s.update_time,u.login_name
         from salary s
         join user u on u.user_id=s.user_id
         <where>
@@ -104,6 +92,30 @@
         </where>
         order by s.create_time desc
     </select>
+
+    <update id="updateSalaryChecked" parameterType="com.salary.entity.Salary">
+        update salary
+        <set>
+            <if test="checked != null and checked != ''">checked = #{checked},</if>
+            <if test="check_result != null and check_result != ''">check_result = #{check_result},</if>
+            <if test="late != null and late != ''">late = #{late},</if>
+            <if test="fail_cause != null and fail_cause != ''">fail_cause = #{fail_cause},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="updater != null and updater != ''">updater = #{updater},</if>
+            update_time=NOW(),
+            check_time=NOW()
+        </set>
+        WHERE salary_id=#{salary_id}
+    </update>
+
+    <delete id="deleteSalaryById" >
+        delete from salary
+        where user_id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and DATE_FORMAT(create_time,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+    </delete>
 
     <select id="getAllDeptSalaryById" resultType="com.salary.entity.Salary" parameterType="int">
         select s.*,u.login_name

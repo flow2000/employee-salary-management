@@ -4,12 +4,13 @@ import cn.hutool.captcha.ShearCaptcha;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.salary.dao.DeptDao;
-import com.salary.dao.MenuDao;
 import com.salary.dao.RoleDao;
+import com.salary.dao.SalaryDao;
 import com.salary.dao.UserDao;
-import com.salary.entity.Menu;
+import com.salary.entity.Salary;
 import com.salary.entity.User;
 import com.salary.service.MenuService;
+import com.salary.service.SalaryService;
 import com.salary.service.TokenService;
 import com.salary.service.UserService;
 import com.salary.util.AjaxResult;
@@ -64,7 +65,13 @@ public class UserServiceImp implements UserService {
     private DeptDao deptDao;
 
     @Autowired
+    private SalaryDao salaryDao;
+
+    @Autowired
     private MenuService menuService;
+
+    @Autowired
+    private SalaryService salaryService;
 
     /**
      * 验证码生成
@@ -252,6 +259,10 @@ public class UserServiceImp implements UserService {
         }
         User user = userDao.getOneUser(login_name);
         map.put("user_id",user.getUser_id());
+        //添加薪资信息
+        Salary salary = new Salary();
+        salary.setUser_id(user.getUser_id());
+        salaryService.insertSalaryConfig(salary);
         return AjaxResult.toAjax(userDao.insertUserRole(map));
     }
 
@@ -285,6 +296,8 @@ public class UserServiceImp implements UserService {
             String[] array = user_id.split(";");
             //删除用户与角色关联
             userDao.deleteUserRole(array);
+            //删除用户与薪资关联
+            salaryDao.deleteSalaryById(array);
             return AjaxResult.toAjax(userDao.deleteUser(array));
         }
         return AjaxResult.error("删除失败");

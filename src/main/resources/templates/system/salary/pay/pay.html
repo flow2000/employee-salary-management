@@ -3,8 +3,231 @@
 <head >
     <th:block th:include="header :: header('薪资发放')"/>
 </head>
+<style type="text/css">
+    table {
+        table-layout: fixed;
+        word-break: break-all;
+    }
+    td {
+        overflow:auto;
+    }
+
+</style>
 <body>
 <th:block th:include="header :: footer"/>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <!--头部工具栏-->
+        <script type="text/html" id="headerToolBar">
+            <form class="layui-form layui-form-pane" style="background-color: #FFFFFF;"
+                  th:hidden="!${@permission.hasPermi('system:salary:pay:select')}" action="">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户帐号</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  id="login_name" style="height: 38px" class="form-control">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="create_time" style="height: 38px" class="form-control">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-primary "
+                            id="searchSalary" lay-event="searchSalary" > <i class="layui-icon"></i>
+                    </button>
+                </div>
+            </form>
+        </script>
 
+        <!--表格-->
+        <table class="layui-hide" id="layui-table" lay-filter="layui-table" style="margin-bottom: unset"></table>
+
+        <!--侧边栏-->
+        <script type="text/html" id="sideToolBar">
+            {{#
+            var updateFlag = [[${@permission.hasPermi('system:salary:pay:update')}]];
+            var user_id=$.cache.get('user').user.user_id;
+            }}
+
+            {{#  if(d.user_id!=user_id&&updateFlag){ }}
+            <a class="layui-btn layui-btn-xs layui-icon-edit layui-icon" lay-event="updateSalary"></a>
+            {{#  } }}
+        </script>
+
+    </div>
+</div>
+<script type="text/javascript">
+    if(!$.common.isExist($.cache.get('user'))||!$.common.isExist(localStorage.user)){
+        window.top.location="login";
+    }
+    if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)){
+        $.cache.init();
+    }
+    var exportFlag = [[${@permission.hasPermi('system:salary:pay:export')}]];
+    var defaultToolbar=[];
+    if(exportFlag){
+        defaultToolbar.push({
+            title: '导出数据',
+            layEvent: 'exportSalaryFile',
+            icon: 'layui-icon-export'
+        });
+    }
+    defaultToolbar.push( 'filter');
+
+    var options={
+        elem: '#layui-table',
+        url: crx+'/salary/getPageSalary',
+        toolbar:'#headerToolBar',
+        headers:{
+            token:$.cache.get("user").user.token,
+            login_name:$.cache.get("user").user.login_name
+        },
+        defaultToolbar: defaultToolbar,
+        cols: [{
+            type: "checkbox",
+        },
+            {
+                type:'numbers',
+                title: '序号',
+            },
+            {
+                field:'login_name',
+                width: 100,
+                title: '用户帐号',
+            },
+            {
+                field:'create_time',
+                title: '创建时间',
+                width: 110,
+                sort: true,
+                templet:function(d){
+                    var create_time = d.create_time;
+                    if(create_time!==''&&$.common.isExist(create_time)){
+                        return create_time.substr(0, 7);
+                    }
+                    return '';
+                }
+            },
+            {
+                field:'base_salary',
+                width: 110,
+                title: '基本薪资',
+                templet:function(d){
+                    if(d.base_salary===null)
+                        return '';
+                    return d.base_salary+"元";
+                },
+            },
+            {
+                field:'week_time',
+                width: 90,
+                title: '奖励绩效',
+                templet:function(d){
+                    if(d.week_time===null)
+                        return '';
+                    return d.week_time*d.overtime*2+d.festival_time*d.overtime*3+d.percentage+d.bonus+"元";
+                }
+            },
+            {
+                field:'absence',
+                width: 90,
+                title: '考勤扣薪',
+                templet:function(d){
+                    if(d.absence===null)
+                        return '';
+                    return d.absence_count*d.absence+d.late_count*d.late+d.leave_count*d.leave+"元";
+                }
+            },
+            {
+                field:'total_salary',
+                width: 110,
+                title: '总计',
+                templet:function(d){
+                    if(d.total_salary===null)
+                        return '';
+                    return d.total_salary+"元";
+                }
+            },
+            {
+                field:'check_result',
+                width: 90,
+                title: '审核结果',
+                templet:function(d){
+                    if(d.check_result==='1')
+                        return '通过';
+                    if(d.check_result==='0')
+                        return '不通过';
+                    return '待审核';
+                },
+            },
+            {
+                field:'fail_cause',
+                title: '审核失败原因',
+                width:160
+            },
+            {
+                field:'check_time',
+                title: '审核时间',
+                sort: true,
+                width:180
+            },
+            {
+                fixed: 'right',
+                title: '操作',
+                toolbar: '#sideToolBar',
+            }
+        ],
+        parseData: function (result) {
+            if(result.code===0){
+                return {
+                    "code": result.code,//解析接口状态
+                    "msg": result.msg,//解析提示文本
+                    "count": result.data.total,//解析数据长度
+                    "data": result.data.list//解析数据列表
+                };
+            }else{
+                $.modal.msgError('表格加载失败',function () {});
+            }
+        },
+    };
+    $.table.init(options);
+
+    layui.use(['form','table','excel','laydate'],function () {
+        var table = layui.table;
+        var form = layui.form;
+        var excel = layui.excel;
+        var laydate = layui.laydate;
+
+        //渲染时间选择器
+        laydate.render({
+            elem: '#create_time'
+            ,type: 'month'
+            ,trigger: 'click'
+        });
+        //监听头部工具栏事件
+        table.on(('toolbar(layui-table)'), function (obj) {
+            switch (obj.event) {
+                case 'searchSalary':
+                    searchSalary(table);
+                    break;
+                case 'exportSalaryFile':
+                    exportSalaryFile(excel);
+                    break;
+            }
+        });
+
+        //监听侧边工具栏事件
+        table.on(('tool(layui-table)'), function (obj) {
+            const data = obj.data;
+            if (obj.event === 'updateSalary') {
+                updateSalary(form,data);
+            }
+        });
+
+    });
+</script>
+<script th:src="@{/js/system/salary/pay.js}" type="text/javascript"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.salary.entity.Salary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface SalaryService {
@@ -29,8 +30,11 @@ public interface SalaryService {
 
     int insertSalaryConfig(Salary salary);
 
+    int updateSalaryChecked(Salary salary);
+
     List<Salary> getAllDeptSalary(int dept_id);
 
     PageInfo<Salary> getPageDeptSalary(Integer page, Integer limit, int dept_id);
 
+    int deleteSalaryById(Map<String, Object> map);
 }

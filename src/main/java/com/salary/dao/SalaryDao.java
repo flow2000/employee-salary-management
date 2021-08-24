@@ -31,6 +31,10 @@ public interface SalaryDao {
 
     List<Salary> searchSalaryConfig(Map<String,Object> map);
 
+    int updateSalaryChecked(Salary salary);
+
     List<Salary> getAllDeptSalaryById(int dept_id);
+
+    int deleteSalaryById(String[] array);
 
 }
