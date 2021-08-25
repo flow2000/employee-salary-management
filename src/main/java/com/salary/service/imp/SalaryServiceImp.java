@@ -186,7 +186,10 @@ public class SalaryServiceImp implements SalaryService {
         return new PageInfo<>(deptSalaryList);
     }
 
-
+    /**
+     * 删除薪资
+     * @return 影响的行数
+     */
     @Override
     public int deleteSalaryById(Map<String, Object> map) {
         String user_id = (String) map.get("user_id");
@@ -195,6 +198,26 @@ public class SalaryServiceImp implements SalaryService {
             return salaryDao.deleteSalaryById(array);
         }
         return 0;
+    }
+
+    /**
+     * 搜索薪资信息
+     * @param page 页码
+     * @param limit 数量
+     * @param login_name 帐号
+     * @param create_time 创建时间
+     * @param dept_id  部门id
+     * @return 查询结果
+     */
+    @Override
+    public PageInfo<Salary> searchDeptSalary(int page, int limit, String login_name, String create_time, int dept_id) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("login_name",login_name);
+        map.put("create_time",create_time);
+        map.put("dept_id",dept_id);
+        PageHelper.startPage(page, limit);
+        List<Salary> salaryList = salaryDao.searchDeptSalary(map);
+        return new PageInfo<>(salaryList);
     }
 
 

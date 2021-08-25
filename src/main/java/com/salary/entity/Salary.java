@@ -30,6 +30,7 @@ public class Salary implements Serializable {
     private BigInteger salary_id;       //工资id
     private BigInteger user_id;         //用户id
     private String login_name;          //用户帐号
+    private String dept_name;           //部门名称
     private BigDecimal base_salary;     //基本薪资
     private int week_time;              //周末加班时长
     private int festival_time;          //节日加班时长

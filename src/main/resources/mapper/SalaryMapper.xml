@@ -3,22 +3,25 @@
 <mapper namespace="com.salary.dao.SalaryDao">
 
     <select id="getAllSalary" resultType="com.salary.entity.Salary">
-        select s.*,u.login_name
+        select s.*,u.login_name,d.dept_name
         from salary s
         join user u on u.user_id=s.user_id
+        left join dept d on d.dept_id=u.dept_id
     </select>
 
     <select id="getOneSalary" parameterType="BigInteger" resultType="com.salary.entity.Salary">
-        select s.*,u.login_name
+        select s.*,u.login_name,d.dept_name
         from salary s
         join user u on u.user_id=s.user_id
+        left join dept d on d.dept_id=u.dept_id
         where s.user_id=#{user_id}
     </select>
 
     <select id="searchSalary" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
-        select s.*,u.login_name
+        select s.*,u.login_name,d.dept_name
         from salary s
         join user u on u.user_id=s.user_id
+        left join dept d on d.dept_id=u.dept_id
         <where>
             <if test="login_name != null and login_name != ''">u.login_name like concat('%', #{login_name}, '%')</if>
             <if test="create_time != null and create_time != ''">and DATE_FORMAT(s.create_time,'%Y-%m') = #{create_time}</if>
@@ -118,7 +121,7 @@
     </delete>
 
     <select id="getAllDeptSalaryById" resultType="com.salary.entity.Salary" parameterType="int">
-        select s.*,u.login_name
+        select s.*,u.login_name,d.dept_name
         from salary s
         join user u on u.user_id=s.user_id
         join dept d on d.dept_id=u.dept_id
@@ -139,5 +142,18 @@
             </if>
         </foreach>
     </insert>
+
+    <select id="searchDeptSalary" parameterType="map" resultType="com.salary.entity.Salary">
+        select s.*,u.login_name,d.dept_name
+        from salary s
+        join user u on u.user_id=s.user_id
+        join dept d on d.dept_id=u.dept_id
+        <where>
+            <if test="login_name != null and login_name != ''">u.login_name like concat('%', #{login_name}, '%')</if>
+            <if test="create_time != null and create_time != ''">and DATE_FORMAT(s.create_time,'%Y-%m') = #{create_time}</if>
+            <if test="dept_id != null and dept_id != ''">and d.dept_id = #{dept_id}</if>
+        </where>
+        order by s.create_time desc
+    </select>
 
 </mapper>

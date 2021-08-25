@@ -37,4 +37,6 @@ public interface SalaryService {
     PageInfo<Salary> getPageDeptSalary(Integer page, Integer limit, int dept_id);
 
     int deleteSalaryById(Map<String, Object> map);
+
+    PageInfo<Salary> searchDeptSalary(int page, int limit, String login_name, String create_time, int dept_id);
 }

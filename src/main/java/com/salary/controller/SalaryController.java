@@ -1,7 +1,6 @@
 package com.salary.controller;
 
 import com.salary.entity.Salary;
-import com.salary.entity.SalaryConfig;
 import com.salary.service.SalaryService;
 import com.salary.util.AjaxResult;
 import io.swagger.annotations.Api;
@@ -192,4 +191,25 @@ public class SalaryController {
             @RequestParam("dept_id") int dept_id){
         return AjaxResult.returnMessage(salaryService.getPageDeptSalary(page,limit,dept_id));
     }
+
+    /**
+     * 搜索薪资信息
+     * @param page 页码
+     * @param limit 数量
+     * @param login_name 帐号
+     * @param create_time 创建时间
+     * @param dept_id  部门id
+     * @return 查询结果
+     */
+    @ApiOperation(value = "搜索薪资信息")
+    @ApiImplicitParam
+    @GetMapping("/searchDeptSalary")
+    public AjaxResult searchDeptSalary(@RequestParam int page,
+                                   @RequestParam int limit,
+                                   @RequestParam String login_name,
+                                   @RequestParam String create_time,
+                                   @RequestParam int dept_id) {
+        return AjaxResult.returnMessage(salaryService.searchDeptSalary(page, limit, login_name, create_time, dept_id));
+    }
+
 }
