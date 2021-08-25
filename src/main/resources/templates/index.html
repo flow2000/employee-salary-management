@@ -286,7 +286,7 @@
                         "email": $("#email").val(),
                         "updater": user.user.user_id,
                     };
-                    $.operate.jsonPost(crx+"/user/updateUser",JSON.stringify(send),function (result) {
+                    $.operate.jsonPost(crx+"/user/updatePerson",JSON.stringify(send),function (result) {
                         if(result.code!==0){
                             $.modal.msgError(result.msg,function () {
                                 layer.close(index);
@@ -330,7 +330,7 @@
                         "password":hex_md5(new_password),
                         "updater": user.user.user_id,
                     };
-                    $.operate.jsonPost(crx+'/user/updateUserPassword',JSON.stringify(send),function (result) {
+                    $.operate.jsonPost(crx+'/user/updatePersonPassword',JSON.stringify(send),function (result) {
                         if(result.code===0){
                             $.modal.msgSuccess('修改成功',function () {
                                 window.top.location = 'login';
@@ -358,7 +358,7 @@
                     "login_name":login_name,
                     "password":hex_md5(old_password.val())
                 };
-                $.operate.jsonPost(crx+"/user/verifyUserPassword",JSON.stringify(send),function(result){
+                $.operate.jsonPost(crx+"/user/verifyPersonPassword",JSON.stringify(send),function(result){
                     if(result.code!==0){
                         $.modal.alertError(result.msg,function () {});
                         $("#old_password").val("");
