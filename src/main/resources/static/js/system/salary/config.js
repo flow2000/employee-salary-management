@@ -66,6 +66,7 @@ function exportSalaryConfigFile(excel) {
                 };
             },
             base_salary: function(value, line, data) {
+                value=value===null?'0':value;
                 if(line.base_salary !== '基本薪资'){
                     return {
                         v: value+"元"

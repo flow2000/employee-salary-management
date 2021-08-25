@@ -46,14 +46,12 @@ function  exportSalaryFile(excel){
             login_name: '用户账号',
             create_time: '创建时间',
             base_salary: '基本薪资',
-            week: '周末加班费',
-            festival: '节日加班费',
-            percentage: '提成',
-            bonus: '奖金',
-            absence: '旷工扣薪',
-            late: '迟到扣薪',
-            leave: '请假扣薪',
+            week_time: '奖励绩效',
+            absence: '考勤扣薪',
             total_salary: '总计',
+            check_result: '审核结果',
+            fail_cause: '审核失败原因',
+            check_time: '审核时间',
             remark: '备注',
         });
         var data = excel.filterExportData(result.data, {
@@ -80,29 +78,9 @@ function  exportSalaryFile(excel){
             },
 
             week_time: function(value, line, data) {
-                if(line.week_time !== '周末加班费'&&value!==''&&$.common.isExist(value)){
+                if(line.week_time !== '奖励绩效'){
                     return {
-                        v: value*line.overtime*2+"元"
-                    };
-                }
-                return {
-                    v: value
-                };
-            },
-            festival_time: function(value, line, data) {
-                if(line.festival_time !== '节日加班费'&&value!==''&&$.common.isExist(value)){
-                    return {
-                        v: value*line.overtime*3+"元"
-                    };
-                }
-                return {
-                    v: value
-                };
-            },
-            percentage: function(value, line, data) {
-                if(line.percentage !== '提成'&&value!==''&&$.common.isExist(value)){
-                    return {
-                        v: value+"元"
+                        v: value*line.overtime*2+line.festival_time*line.overtime*3+line.percentage+d.bonus+"元"
                     };
                 }
                 return {
@@ -119,32 +97,15 @@ function  exportSalaryFile(excel){
                     v: value
                 };
             },
-            late: function(value, line, data) {
-                if(line.late !== '迟到扣薪'&&value!==''&&$.common.isExist(value)){
-                    return {
-                        v: value*line.late_count+"元"
-                    };
-                }
-                return {
-                    v: value
-                };
-            },
-            leave: function(value, line, data) {
-                if(line.leave !== '请假扣薪'&&value!==''&&$.common.isExist(value)){
-                    return {
-                        v: value*line.leave_count+"元"
-                    };
-                }
-                return {
-                    v: value
-                };
-            },
             total_salary: 'total_salary',
+            check_result: 'check_result',
+            fail_cause: 'fail_cause',
+            check_time: 'check_time',
             remark: 'remark',
         });
         excel.exportExcel({
             sheet1: data
-        }, '奖惩录入数据.xlsx', 'xlsx');
+        }, '薪资数据.xlsx', 'xlsx');
 
     }
 }
