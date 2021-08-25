@@ -1,7 +1,6 @@
 package com.salary.dao;
 
 import com.salary.entity.Salary;
-import com.salary.entity.SalaryConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +36,7 @@ public interface SalaryDao {
 
     int deleteSalaryById(String[] array);
 
-    int insertSalaryByArray(List<Map> list);
+    int insertSQLSalary();
 
     List<Salary> searchDeptSalary(Map<String, Object> map);
 }

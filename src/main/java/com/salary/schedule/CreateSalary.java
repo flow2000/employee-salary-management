@@ -29,8 +29,7 @@ public class CreateSalary {
     @Scheduled(cron = "0 0 0 1 * ?")//每月1号凌晨0点执行一次
     public void insertSalary() {
         log.info("定时处理创建薪资任务 处理开始");
-        List<Map> list = userDao.getAllUser();
-        salaryDao.insertSalaryByArray(list);
+        salaryDao.insertSQLSalary();
         log.info("处理创建薪资任务 处理结束");
     }
 
