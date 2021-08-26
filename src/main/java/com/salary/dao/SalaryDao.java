@@ -43,4 +43,7 @@ public interface SalaryDao {
     int updateSQLSalary(List<Salary> list);
 
     List<Salary> searchDeptSalary(Map<String, Object> map);
+
+    List<Map> getTotalSalaryList();
+
 }

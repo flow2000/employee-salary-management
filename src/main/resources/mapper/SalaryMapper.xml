@@ -170,4 +170,14 @@
         order by s.create_time desc
     </select>
 
+    <select id="getTotalSalaryList" resultType="map">
+        SELECT DATE_FORMAT(s.create_time,'%Y-%m') as create_time,
+        SUM(s.total_salary) as total_salary
+        from salary s
+        join user u on u.user_id=s.user_id
+        where s.check_result=1 and s.checked=1
+        and s.create_time between date_sub(now(),interval 6 month) and now()
+        group by DATE_FORMAT(s.create_time,'%Y-%m')
+    </select>
+
 </mapper>

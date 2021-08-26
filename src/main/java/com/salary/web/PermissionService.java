@@ -37,7 +37,9 @@ public class PermissionService
      */
     public String hasPermi(String permission)
     {
-        return isPermitted(permission) ? ACCESS : NOACCESS;
+        boolean res = isPermitted(permission);
+        System.out.println(res);
+        return res ? ACCESS : NOACCESS;
     }
 
     /**

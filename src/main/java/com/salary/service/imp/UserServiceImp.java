@@ -144,6 +144,23 @@ public class UserServiceImp implements UserService {
         List<Map> deptList = deptDao.getAllDept();
         Map<String, Object> menuMap = menuService.getMenu(role_id);
         List<Map> salaryList = salaryDao.getOneSalaryByLoginName(login_name);
+        List<List> personSalaryList = listToDoubleList(salaryList);
+        List<List> totalSalaryList = getTotalSalaryList();
+
+        resultMap.put("roles",roleList);
+        resultMap.put("depts",deptList);
+        resultMap.put("menus",menuMap);
+        resultMap.put("personSalary",personSalaryList);
+        resultMap.put("totalSalary",totalSalaryList);
+        return AjaxResult.returnMessage(resultMap);
+    }
+
+    /**
+     * 将list数组转二维数组
+     * @param salaryList 数组
+     * @return 二维数组
+     */
+    private List<List> listToDoubleList(List<Map> salaryList) {
         List<Object> timeList=new ArrayList<>(); timeList.add("salary");
         List<Object> dockPayList = new ArrayList<>(); dockPayList.add("考勤扣薪");
         List<Object> baseSalaryList = new ArrayList<>(); baseSalaryList.add("基本薪资");
@@ -161,11 +178,25 @@ public class UserServiceImp implements UserService {
         personSalaryList.add(baseSalaryList);
         personSalaryList.add(rewardsList);
 
-        resultMap.put("roles",roleList);
-        resultMap.put("depts",deptList);
-        resultMap.put("menus",menuMap);
-        resultMap.put("personSalary",personSalaryList);
-        return AjaxResult.returnMessage(resultMap);
+        return personSalaryList;
+    }
+
+    /**
+     * 获取统计薪资
+     * @return 统计薪资
+     */
+    private List<List> getTotalSalaryList() {
+        List<Map> salaryList = salaryDao.getTotalSalaryList();
+        List<Object> timeList=new ArrayList<>();
+        List<Object> totalSalaryList=new ArrayList<>();
+        for (Map map:salaryList){
+            timeList.add(map.get("create_time"));
+            totalSalaryList.add(map.get("total_salary"));
+        }
+        List<List> list = new ArrayList<>();
+        list.add(timeList);
+        list.add(totalSalaryList);
+        return list;
     }
 
     /**

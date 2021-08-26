@@ -29,6 +29,7 @@ let roles = {};
 let depts = {};
 let menus = {};
 let personSalary = {};
+let totalSalary = {};
 
 const crx="http://localhost:8080/salary/api";
 
@@ -85,6 +86,7 @@ var submitType={
                         $.cache.set("menus",result.data.menus, -1);
                         $.cache.set("depts",result.data.depts, -1);
                         $.cache.set("personSalary",result.data.personSalary, -1);
+                        $.cache.set("totalSalary",result.data.totalSalary, -1);
                     }
                 });
 

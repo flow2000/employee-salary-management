@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="header :: header('薪资统计')"></head>
+<body>
+<div class="layuimini-container">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card" style="padding: 20px">
+                <div class="layui-card-header"><h2 style="text-align: center"><strong>近半年薪资发放统计</strong></h2></div>
+                <div class="layui-card-body">
+                    <div id="container" style="height: 500px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:include="header :: footer"/>
+<script type="text/javascript">
+    if(!$.common.isExist($.cache.get('user'))||!$.common.isExist(localStorage.user)){
+        window.top.location="login";
+    }
+    if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)||!$.common.isExist(personSalary)){
+        $.cache.init();
+    }
+    layui.use(['echarts'], function () {
+        var dom = document.getElementById("container");
+        var echarts = layui.echarts;
+        var myChart = echarts.init(dom);
+        var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['总发放薪资/元']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: $.cache.get('totalSalary')[0],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '总发放薪资',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: $.cache.get('totalSalary')[1],
+                    itemStyle: {
+                        normal: {
+                            color: function(params) {
+                                var colorList = ['#5470C6','#5470C6','#5470C6'];
+                                return colorList[params.dataIndex]
+                            }
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    })
+</script>
+
+</body>
+</html>
