@@ -55,6 +55,7 @@ public class Salary implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date update_time;           //修改时间
     private String remark;              //备注
+    private Boolean requireCalculate=true;  //是否需要计算(默认需要=true)
     public Salary calculateSalary(){
         BigDecimal total_salary = new BigDecimal("0");
         BigDecimal base_salary = init(getBase_salary());
@@ -78,6 +79,9 @@ public class Salary implements Serializable {
         total_salary = total_salary.subtract(leave.multiply(new BigDecimal(leave_count)));
         total_salary = total_salary.subtract(late.multiply(new BigDecimal(late_count)));
         total_salary = total_salary.subtract(absence.multiply(new BigDecimal(absence_count)));
+        if(getTotal_salary()!=null){
+            requireCalculate = total_salary.compareTo(getTotal_salary()) != 0;
+        }
         this.setTotal_salary(total_salary);
         return this;
     }

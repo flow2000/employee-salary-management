@@ -133,6 +133,19 @@
 		select u.user_id,NOW() from user u
     </insert>
 
+    <update id="updateSQLSalary" parameterType="List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update salary
+            <set>
+                <if test="item.total_salary != null ">
+                    total_salary = #{item.total_salary},
+                </if>
+                update_time = NOW()
+            </set>
+            WHERE salary_id = #{item.salary_id}
+        </foreach>
+    </update>
+
     <select id="searchDeptSalary" parameterType="map" resultType="com.salary.entity.Salary">
         select s.*,u.login_name,d.dept_name
         from salary s
