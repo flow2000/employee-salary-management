@@ -2,7 +2,114 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head th:replace="header :: header('欢迎页')"></head>
 <body>
-<h1>欢迎页</h1>
-<div th:replace="header :: footer"></div>
+<div class="layuimini-container">
+    <div id="msg" style="text-align: center;margin-top: 30px;display: none">
+        <strong><h2 >无数据</h2></strong>
+    </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12" style="margin-top: 30px">
+            <div id="container" style="width: 100%;height: 600px"></div>
+        </div>
+    </div>
+</div>
+<th:block th:include="header :: footer"/>
+<script type="text/javascript">
+    if(!$.common.isExist($.cache.get('user'))||!$.common.isExist(localStorage.user)){
+        window.top.location="login";
+    }
+    if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)||!$.common.isExist(personSalary)){
+        $.cache.init();
+    }
+    layui.use(['echarts'], function () {
+        var dom = document.getElementById("container");
+        var echarts = layui.echarts;
+        var myChart = echarts.init(dom);
+        var option = {
+            legend: {},
+            tooltip: {
+                trigger: 'axis',
+                showContent: false
+            },
+            dataset: {
+                source: $.cache.get("personSalary")
+            },
+            xAxis: {type: 'category'},
+            yAxis: {gridIndex: 0},
+            grid: {top: '55%'},
+            series: [
+                {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                {type: 'line', smooth: true, seriesLayoutBy: 'row', emphasis: {focus: 'series'}},
+                {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: '30%',
+                    center: ['50%', '25%'],
+                    emphasis: {focus: 'data'},
+                    label: {
+                        formatter: '{b}: {@} ({d}%)'
+                    },
+                    encode: {
+                        itemName: 'salary',
+                        value: '08',
+                        tooltip: '08'
+                    }
+                }
+            ]
+        };
+
+
+
+        if(option.dataset.source[0]!==null&&option.dataset.source[0].length<=1){
+            document.getElementById("msg").style.display = "block";
+        }
+        var first = option.dataset.source[0][1];
+        if(first!==null){
+            option.series[3].label.formatter='{b}: {@'+first+'} ({d}%)';
+            option.series[3].encode.value=first;
+            option.series[3].encode.tooltip=first;
+        }
+        myChart.on('updateAxisPointer', function (event) {
+            var xAxisInfo = event.axesInfo[0];
+            if (xAxisInfo) {
+                var dimension = xAxisInfo.value + 1;
+                myChart.setOption({
+                    series: {
+                        id: 'pie',
+                        label: {
+                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                        },
+                        encode: {
+                            value: dimension,
+                            tooltip: dimension
+                        }
+                    }
+                });
+            }
+        });
+
+        myChart.on('updateAxisPointer', function (event) {
+            var xAxisInfo = event.axesInfo[0];
+            if (xAxisInfo) {
+                var dimension = xAxisInfo.value + 1;
+                myChart.setOption({
+                    series: {
+                        id: 'pie',
+                        label: {
+                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                        },
+                        encode: {
+                            value: dimension,
+                            tooltip: dimension
+                        }
+                    }
+                });
+            }
+        });
+
+        myChart.setOption(option);
+
+    });
+</script>
 </body>
 </html>

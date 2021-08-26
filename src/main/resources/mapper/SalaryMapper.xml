@@ -17,6 +17,17 @@
         where s.salary_id=#{salary_id}
     </select>
 
+    <select id="getOneSalaryByLoginName" parameterType="String" resultType="map">
+        SELECT DATE_FORMAT(s.create_time,'%Y-%m') as create_time,
+        s.absence_count*s.absence+s.late_count*s.late+s.leave_count*s.`leave` as dock_pay,
+        s.base_salary,
+        s.week_time*s.overtime*2+s.festival_time*s.overtime*3+s.percentage+s.bonus as rewards,
+        s.total_salary
+        from salary s
+        join user u on u.user_id=s.user_id
+        where login_name=#{login_name} and s.check_result=1 and s.checked=1
+    </select>
+
     <select id="searchSalary" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
         select s.*,u.login_name,d.dept_name
         from salary s

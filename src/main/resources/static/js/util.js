@@ -28,6 +28,7 @@ let user = {};
 let roles = {};
 let depts = {};
 let menus = {};
+let personSalary = {};
 
 const crx="http://localhost:8080/salary/api";
 
@@ -83,6 +84,7 @@ var submitType={
                         $.cache.set("roles",result.data.roles, -1); //将返回的数据存到localStorage并设置过期时间为永久
                         $.cache.set("menus",result.data.menus, -1);
                         $.cache.set("depts",result.data.depts, -1);
+                        $.cache.set("personSalary",result.data.personSalary, -1);
                     }
                 });
 

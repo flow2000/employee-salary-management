@@ -16,6 +16,8 @@ public interface SalaryDao {
 
     Salary getOneSalary(BigInteger salary_id);
 
+    List<Map> getOneSalaryByLoginName(String login_name);
+
     List<Salary> searchSalary(Map<String, Object> map);
 
     int updateTotalSalary(Salary salary);

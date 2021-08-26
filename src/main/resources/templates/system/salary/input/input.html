@@ -52,7 +52,7 @@
     if(!$.common.isExist($.cache.get('user'))||!$.common.isExist(localStorage.user)){
         window.top.location="login";
     }
-    if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)){
+    if(!$.common.isExist(roles)||!$.common.isExist(menus)||!$.common.isExist(depts)||!$.common.isExist(personSalary)){
         $.cache.init();
     }
     var exportFlag = [[${@permission.hasPermi('system:salary:input:export')}]];

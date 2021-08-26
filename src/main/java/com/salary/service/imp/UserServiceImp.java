@@ -143,10 +143,28 @@ public class UserServiceImp implements UserService {
         List<Map> roleList = roleDao.getAllRole();
         List<Map> deptList = deptDao.getAllDept();
         Map<String, Object> menuMap = menuService.getMenu(role_id);
+        List<Map> salaryList = salaryDao.getOneSalaryByLoginName(login_name);
+        List<Object> timeList=new ArrayList<>(); timeList.add("salary");
+        List<Object> dockPayList = new ArrayList<>(); dockPayList.add("考勤扣薪");
+        List<Object> baseSalaryList = new ArrayList<>(); baseSalaryList.add("基本薪资");
+        List<Object> rewardsList = new ArrayList<>(); rewardsList.add("奖励绩效");
+
+        for (Map map:salaryList){
+            timeList.add(map.get("create_time"));
+            dockPayList.add(map.get("dock_pay"));
+            baseSalaryList.add(map.get("base_salary"));
+            rewardsList.add(map.get("rewards"));
+        }
+        List<List> personSalaryList = new ArrayList<>();
+        personSalaryList.add(timeList);
+        personSalaryList.add(dockPayList);
+        personSalaryList.add(baseSalaryList);
+        personSalaryList.add(rewardsList);
 
         resultMap.put("roles",roleList);
         resultMap.put("depts",deptList);
         resultMap.put("menus",menuMap);
+        resultMap.put("personSalary",personSalaryList);
         return AjaxResult.returnMessage(resultMap);
     }
 
