@@ -26,6 +26,7 @@
         from salary s
         join user u on u.user_id=s.user_id
         where login_name=#{login_name} and s.check_result=1 and s.checked=1
+        order by create_time asc
     </select>
 
     <select id="searchSalary" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">
@@ -178,6 +179,7 @@
         where s.check_result=1 and s.checked=1
         and s.create_time between date_sub(now(),interval 6 month) and now()
         group by DATE_FORMAT(s.create_time,'%Y-%m')
+        order by create_time asc
     </select>
 
 </mapper>
