@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.salary.dao.TestDao">
+
+    <update id="UpdateUserSalary" parameterType="List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            update salary
+            <set>
+                <if test="item.base_salary != null ">
+                    base_salary = #{item.base_salary},
+                </if>
+                <if test="item.week_time != null ">
+                    week_time = #{item.week_time},
+                </if>
+                <if test="item.festival_time != null ">
+                    festival_time = #{item.festival_time},
+                </if>
+                <if test="item.percentage != null ">
+                    percentage = #{item.percentage},
+                </if>
+                <if test="item.bonus != null ">
+                    bonus = #{item.bonus},
+                </if>
+                <if test="item.absence_count != null ">
+                    absence_count = #{item.absence_count},
+                </if>
+                <if test="item.late_count != null ">
+                    late_count = #{item.late_count},
+                </if>
+                <if test="item.leave_count != null ">
+                    leave_count = #{item.leave_count},
+                </if>
+                update_time = NOW()
+            </set>
+            WHERE salary_id = #{item.salary_id}
+        </foreach>
+    </update>
+
+</mapper>
