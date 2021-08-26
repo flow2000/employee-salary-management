@@ -14,7 +14,7 @@
         from salary s
         join user u on u.user_id=s.user_id
         left join dept d on d.dept_id=u.dept_id
-        where s.user_id=#{user_id}
+        where s.salary_id=#{salary_id}
     </select>
 
     <select id="searchSalary" parameterType="java.util.HashMap" resultType="com.salary.entity.Salary">

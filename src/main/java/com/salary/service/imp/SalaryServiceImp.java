@@ -43,11 +43,11 @@ public class SalaryServiceImp implements SalaryService {
 
     /**
      * 获取一个薪资信息
-     * @param user_id 用户id
+     * @param salary_id 用户id
      * @return 薪资信息
      */
-    public Salary getOneSalary(BigInteger user_id){
-        return salaryDao.getOneSalary(user_id);
+    public Salary getOneSalary(BigInteger salary_id){
+        return salaryDao.getOneSalary(salary_id);
     }
 
 
@@ -76,7 +76,7 @@ public class SalaryServiceImp implements SalaryService {
     @Override
     public int updateSalaryInput(Salary salary) {
         int row = salaryDao.updateSalaryInput(salary);
-        salary = salaryDao.getOneSalary(salary.getUser_id());
+        salary = salaryDao.getOneSalary(salary.getSalary_id());
         if(salary!=null){
             salary.calculateSalary();//计算工资
             salaryDao.updateTotalSalary(salary);
@@ -114,7 +114,7 @@ public class SalaryServiceImp implements SalaryService {
     @Override
     public int updateSalaryConfig(Salary salary) {
         int row = salaryDao.updateSalaryConfig(salary);
-        salary = salaryDao.getOneSalary(salary.getUser_id());
+        salary = salaryDao.getOneSalary(salary.getSalary_id());
         if(salary!=null){
             salary.calculateSalary();
             salaryDao.updateTotalSalary(salary);
