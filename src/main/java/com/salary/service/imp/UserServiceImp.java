@@ -101,7 +101,7 @@ public class UserServiceImp implements UserService {
         HttpSession session = request.getSession(true);//获得session对象
         String key = session.getId();                     //获得sessionId
         String trueCaptcha = (String) session.getAttribute(key); //拿到正确的验证码
-        if(!Objects.equals(trueCaptcha,userCaptcha)){ //比较验证码是否一致
+        if(Objects.equals(trueCaptcha,userCaptcha)){ //比较验证码是否一致
             UsernamePasswordToken token1 = new UsernamePasswordToken(
                     (String)param.get("login_name"),
                     (String)param.get(PASSWORD)
