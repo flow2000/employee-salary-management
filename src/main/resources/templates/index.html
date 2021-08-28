@@ -350,7 +350,7 @@
             if(old_password.val()!==""){
                 var login_name =  user.user.login_name;
                 if(login_name===""){
-                    $.modal.alertError('请重试',function () {});
+                    $.modal.msgError('请重试',function () {});
                     window.location.reload();
                 }
                 var send={
@@ -359,7 +359,7 @@
                 };
                 $.operate.jsonPost(crx+"/user/verifyPersonPassword",JSON.stringify(send),function(result){
                     if(result.code!==0){
-                        $.modal.alertError(result.msg,function () {});
+                        $.modal.msgError(result.msg,function () {});
                         $("#old_password").val("");
                     }
                 });
