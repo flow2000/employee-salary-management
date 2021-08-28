@@ -1,6 +1,5 @@
 package com.salary.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.salary.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
