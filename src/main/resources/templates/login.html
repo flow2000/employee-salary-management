@@ -142,6 +142,9 @@
     function callback(result) {
         if(result.code===web_status.FAIL){
             $.modal.msgError(result.msg,function () {});
+            createCode();
+            $('#loginCard').val('');
+            $('#loginCard').focus();
         }else{
             $.cache.set("user",result.data, expire_user); //将返回的数据存到localStorage并设置过期时间60分钟
             $.modal.msgSuccess(result.msg,function () {
