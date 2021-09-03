@@ -7,6 +7,7 @@
         from salary s
         join user u on u.user_id=s.user_id
         left join dept d on d.dept_id=u.dept_id
+        order by create_time desc
     </select>
 
     <select id="getOneSalary" parameterType="BigInteger" resultType="com.salary.entity.Salary">
