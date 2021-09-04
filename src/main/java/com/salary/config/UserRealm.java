@@ -72,6 +72,9 @@ public class UserRealm extends AuthorizingRealm
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
         User user = (User) userService.getOneUser(username).get("data");
+        if(user==null){
+            throw new AuthenticationException();
+        }
         String upPassword = String.valueOf(upToken.getPassword());
         DigestPass dp=new DigestPass();  //MD5摘要算法
         String password = dp.getDigestString( upPassword+user.getSalt()); //盐加密
