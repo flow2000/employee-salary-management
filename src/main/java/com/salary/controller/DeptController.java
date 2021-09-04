@@ -1,10 +1,12 @@
 package com.salary.controller;
 
+import com.salary.exception.GlobalException;
 import com.salary.service.DeptService;
 import com.salary.util.AjaxResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/dept")
 @Api(value="DeptController",tags="部门接口")
-public class DeptController {
+public class DeptController extends GlobalException {
 
     @Autowired
     private DeptService deptService;
@@ -24,6 +26,7 @@ public class DeptController {
      */
     @ApiOperation(value = "获取所有的部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:view")
     @GetMapping("/getAllDept")
     public AjaxResult getAllDept(){
         return deptService.getAllDept();
@@ -37,6 +40,7 @@ public class DeptController {
      */
     @ApiOperation(value = "分页获取部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:view")
     @GetMapping("/getPageDept")
     public AjaxResult getPageDept(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit){
         return deptService.getPageDept(page,limit);
@@ -64,6 +68,7 @@ public class DeptController {
      */
     @ApiOperation(value = "搜索部门")
     @ApiImplicitParam
+    @RequiresPermissions("system:dept:select")
     @GetMapping("/searchDept")
     public AjaxResult searchDept(@RequestParam int page,@RequestParam int limit,
                                  @RequestParam String searchKey,@RequestParam String searchValue){
@@ -75,8 +80,9 @@ public class DeptController {
      * @param map 部门信息
      * @return 成功或者失败消息
      */
-    @ApiOperation(value = "获取单个部门信息")
+    @ApiOperation(value = "添加部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:insert")
     @PostMapping("/insertDept")
     public AjaxResult insertDept(@RequestBody Map<String, Object> map){
         return deptService.insertDept(map);
@@ -90,6 +96,7 @@ public class DeptController {
      */
     @ApiOperation(value = "修改部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:update")
     @PostMapping("/updateDept")
     public AjaxResult updateDept(@RequestBody Map<String, Object> map){
         return deptService.updateDept(map);
@@ -102,6 +109,7 @@ public class DeptController {
      */
     @ApiOperation(value = "修改部门状态")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:update")
     @PostMapping("/changeDeptStatus")
     public AjaxResult changeDeptStatus(@RequestBody Map<String, Object> map){
         return deptService.changeDeptStatus(map);
@@ -114,6 +122,7 @@ public class DeptController {
      */
     @ApiOperation(value = "删除部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:delete")
     @PostMapping("/deleteDept")
     public AjaxResult deleteDept(@RequestBody Map<String, Object> map){
         return deptService.deleteDept(map);
@@ -126,6 +135,7 @@ public class DeptController {
      */
     @ApiOperation(value = "合并部门信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:dept:merge")
     @PostMapping("/mergeDept")
     public AjaxResult mergeDept(@RequestBody Map<String, Object> map){
         return deptService.mergeDept(map);

@@ -1,10 +1,12 @@
 package com.salary.controller;
 
+import com.salary.exception.GlobalException;
 import com.salary.service.UserService;
 import com.salary.util.AjaxResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +19,7 @@ import java.util.Map;
 @RestController
 @Api(value="UserController",tags="用户接口")
 @RequestMapping("/api")
-public class UserController {
+public class UserController extends GlobalException {
 
     @Autowired
     private UserService userService;
@@ -59,6 +61,7 @@ public class UserController {
      */
     @ApiOperation(value = "获取所有的用户信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:view")
     @GetMapping("/user/getAllUser")
     public AjaxResult getAllUser(){
         return userService.getAllUser();
@@ -72,6 +75,7 @@ public class UserController {
      */
     @ApiOperation(value = "分页获取用户信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:view")
     @GetMapping("/user/getPageUser")
     public AjaxResult getPageUser(
             @RequestParam("page") Integer page,
@@ -98,6 +102,7 @@ public class UserController {
      */
     @ApiOperation(value = "获取单个用户信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:insert")
     @PostMapping("/user/insertUser")
     public AjaxResult insertUser(@RequestBody Map<String, Object> map){
         return userService.insertUser(map);
@@ -114,6 +119,7 @@ public class UserController {
      */
     @ApiOperation(value = "搜索用户")
     @ApiImplicitParam
+    @RequiresPermissions("system:user:select")
     @GetMapping("/user/searchUser")
     public AjaxResult searchUser(@RequestParam int page,@RequestParam int limit,
                                    @RequestParam String searchKey,@RequestParam String searchValue){
@@ -163,6 +169,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:update")
     @PostMapping("/user/updateUser")
     public AjaxResult updateUser(@RequestBody Map<String, Object> map){
         return userService.updateUser(map);
@@ -175,6 +182,7 @@ public class UserController {
      */
     @ApiOperation(value = "重置用户密码")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:reset")
     @PostMapping("/user/resetUserPassword")
     public AjaxResult resetUserPassword(@RequestBody Map<String, Object> map){
         return userService.resetUserPassword(map);
@@ -187,6 +195,7 @@ public class UserController {
      */
     @ApiOperation(value = "修改用户状态")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:update")
     @PostMapping("/user/changeUserStatus")
     public AjaxResult changeUserStatus(@RequestBody Map<String, Object> map){
         return userService.changeUserStatus(map);
@@ -199,6 +208,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除用户信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:user:delete")
     @PostMapping("/user/deleteUser")
     public AjaxResult deleteUser(@RequestBody Map<String, Object> map){
         return userService.deleteUser(map);

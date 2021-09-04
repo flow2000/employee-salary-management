@@ -5,6 +5,7 @@ import com.salary.util.AjaxResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class RoleController {
      */
     @ApiOperation(value = "获取所有的角色信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:view")
     @GetMapping("/getAllRole")
     public AjaxResult getAllRole(){
         return roleService.getAllRole();
@@ -37,6 +39,7 @@ public class RoleController {
      */
     @ApiOperation(value = "分页获取角色信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:view")
     @GetMapping("/getPageRole")
     public AjaxResult getPageRole(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit){
         return roleService.getPageRole(page,limit);
@@ -65,6 +68,7 @@ public class RoleController {
      */
     @ApiOperation(value = "搜索角色")
     @ApiImplicitParam
+    @RequiresPermissions("system:role:select")
     @GetMapping("/searchRole")
     public AjaxResult searchRole(@RequestParam int page,@RequestParam int limit,
                                  @RequestParam String searchKey,@RequestParam String searchValue){
@@ -78,6 +82,7 @@ public class RoleController {
      */
     @ApiOperation(value = "获取单个角色信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:insert")
     @PostMapping("/insertRole")
     public AjaxResult insertRole(@RequestBody Map<String, Object> map){
         return roleService.insertRole(map);
@@ -91,6 +96,7 @@ public class RoleController {
      */
     @ApiOperation(value = "修改角色信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:update")
     @PostMapping("/updateRole")
     public AjaxResult updateRole(@RequestBody Map<String, Object> map){
         return roleService.updateRole(map);
@@ -103,6 +109,7 @@ public class RoleController {
      */
     @ApiOperation(value = "修改角色状态")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:update")
     @PostMapping("/changeRoleStatus")
     public AjaxResult changeRoleStatus(@RequestBody Map<String, Object> map){
         return roleService.changeRoleStatus(map);
@@ -115,6 +122,7 @@ public class RoleController {
      */
     @ApiOperation(value = "删除角色信息")
     @ApiImplicitParam()
+    @RequiresPermissions("system:role:delete")
     @PostMapping("/deleteRole")
     public AjaxResult deleteRole(@RequestBody Map<String, Object> map){
         return roleService.deleteRole(map);
